@@ -1,0 +1,93 @@
+# Compiled class files
+*.class
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.factorypath
+.springBeans
+.sts4-cache/
+
+# VS Code
+.vscode/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Java Flight Recorder
+*.jfr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# Test reports
+surefire-reports/
+failsafe-reports/
+
+# Coverage
+coverage/
+jacoco.exec
+
+# Generated files
+generated/
+generated-sources/
+generated-test-sources/
+
+# Local application configs (optional)
+application-local.yml
+application-local.properties
+application-dev.yml
+application-dev.properties
+
+# H2 Database
+*.mv.db
+*.trace.db
+
+# Banco local
+data/
