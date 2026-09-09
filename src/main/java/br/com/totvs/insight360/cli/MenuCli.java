@@ -14,6 +14,7 @@ import br.com.totvs.insight360.service.ReuniaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  * Interface de linha de comando (CLI) do TOTVS Meeting Intelligence.
  */
 @Component
+@Profile("cli")
 @RequiredArgsConstructor
 @Slf4j
 @SuppressWarnings("unused") // instanciada pelo Spring via @Component / CommandLineRunner

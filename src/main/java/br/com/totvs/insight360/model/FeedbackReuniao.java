@@ -23,29 +23,29 @@ public class FeedbackReuniao {
     @JoinColumn(name = "reuniao_id")
     private Reuniao reuniao;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String problemaIdentificado;
 
     private String categoriaProblema;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String motivoNaoIdentificadoAntes;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String sinaisNaConversa;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String comoIdentificarAntes;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String perguntasRecomendadas;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String acaoDeMelhoria;
 
     @Enumerated(EnumType.STRING)
     private NivelCriticidade nivelCriticidade;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String mensagemEducativa;
 }

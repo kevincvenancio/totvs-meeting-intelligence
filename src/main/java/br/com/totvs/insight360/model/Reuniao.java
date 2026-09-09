@@ -44,10 +44,10 @@ public class Reuniao {
     private String  faturamento;
     private Double  notaNps;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String transcricaoOriginal;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String transcricaoTratada;
 
     @Enumerated(EnumType.STRING)
@@ -55,19 +55,19 @@ public class Reuniao {
 
     private Integer pontuacaoCompletude;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String motivoIncompletude;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String insightParcial;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String locutoresIdentificados;
 
     @Enumerated(EnumType.STRING)
     private Sentimento sentimento;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String sentimentoJustificativa;
 
     @Enumerated(EnumType.STRING)
@@ -83,28 +83,33 @@ public class Reuniao {
     private String categoriasPrincipais;
     private String prioridade;
 
-    @Column(columnDefinition = "TEXT")
+    /**
+     * Tema e resumo entram na pesquisa textual do Front-End, por isso sao mapeados
+     * como VARCHAR2 e nao como CLOB: o Oracle nao aceita LOWER() sobre CLOB.
+     * Os limites tem folga sobre o maior valor ja gerado pela analise (79 e 163).
+     */
+    @Column(length = 500)
     private String temaReuniao;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 1000)
     private String resumoReuniao;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String pontosPrincipais;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String doresIdentificadas;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String oportunidades;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String recomendacaoFinal;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String insightsJson;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String feedbackEducativo;
 
     private Integer scoreQualidade;
@@ -116,6 +121,15 @@ public class Reuniao {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lote_id")
     private ImportacaoLote loteImportacao;
+
+    /**
+     * Cliente cadastrado vinculado a esta reuniao. Opcional: reunioes importadas
+     * do CSV nascem apenas com o nome da unidade no campo {@code cliente} e podem
+     * ser vinculadas depois a um {@link Cliente} da base.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private Cliente clienteVinculado;
 
     private String nomeArquivoOrigem;
     private LocalDateTime dataImportacao;

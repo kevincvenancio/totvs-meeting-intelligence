@@ -25,12 +25,12 @@ public class Insight {
 
     private String tipo;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String descricao;
 
     private String prioridade;   // ALTA / MEDIA / BAIXA
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String trechoOrigem;
 
     private Integer confianca;   // 0-100

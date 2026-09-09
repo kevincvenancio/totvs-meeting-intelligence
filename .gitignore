@@ -91,3 +91,6 @@ application-dev.properties
 
 # Banco local
 data/
+
+# Relatorios PDF gerados pela aplicacao
+relatorios/

@@ -1,6 +1,7 @@
 package br.com.totvs.insight360.service;
 
 import br.com.totvs.insight360.model.ImportacaoLote;
+import br.com.totvs.insight360.exception.RecursoNaoEncontradoException;
 import br.com.totvs.insight360.repository.ImportacaoLoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +93,18 @@ public class ImportacaoLoteService {
      */
     public Optional<ImportacaoLote> ultimoLote() {
         return loteRepository.findTopByOrderByDataHoraImportacaoDesc();
+    }
+
+    /**
+     * Busca um lote pelo identificador.
+     *
+     * @param id identificador do lote
+     * @return lote encontrado
+     * @throws RecursoNaoEncontradoException quando o id nao existe
+     */
+    public ImportacaoLote buscarPorId(Long id) {
+        return loteRepository.findById(id)
+                .orElseThrow(() -> RecursoNaoEncontradoException.de("Lote de importação", id));
     }
 
     /**

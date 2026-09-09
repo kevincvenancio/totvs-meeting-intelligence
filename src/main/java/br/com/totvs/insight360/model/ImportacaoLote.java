@@ -44,6 +44,6 @@ public class ImportacaoLote {
 
     private String hashArquivo;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String observacoes;
 }
