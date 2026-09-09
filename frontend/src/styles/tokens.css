@@ -1,0 +1,138 @@
+/* ============================================================================
+   INSIGHT360 — Sistema de design
+   Descritor: "Obsidiana com brasa — analytics editorial sobre papel quente."
+
+   Tudo o que é cor, tipo, ritmo e profundidade nasce aqui. Nenhum componente
+   escreve hex literal: só consome estes tokens.
+   ========================================================================== */
+
+@theme {
+  /* ── Superfícies: da obsidiana ao papel ───────────────────────────────── */
+  --color-ink: #08090b;
+  --color-carbon: #0e1015;
+  --color-graphite: #12141a;
+  --color-slate: #1a1e26;
+  --color-line: #242932;
+  --color-line-soft: #191d25;
+
+  --color-ivory: #f4f1ea;
+  --color-paper: #eae6dc;
+  --color-parchment: #ded9cc;
+
+  /* ── Tinta sobre obsidiana ────────────────────────────────────────────── */
+  --color-bone: #f2efe9;
+  --color-ash: #9aa0ac;
+  --color-smoke: #6a707c;
+  --color-dust: #444a55;
+
+  /* ── Brasa: o único acento cromático da marca ─────────────────────────── */
+  --color-ember: #d9622c;
+  --color-ember-hot: #ff7a3d;
+  --color-ember-deep: #8f3a13;
+  --color-ember-wash: #1e120c;
+
+  /* ── Paleta de dados (validada: dark e light, CVD + contraste) ─────────
+     Ordem dos slots é o mecanismo de segurança CVD — não reordenar.       */
+  --color-data-1: #d9622c; /* brasa   */
+  --color-data-2: #3e87d8; /* azure   */
+  --color-data-3: #2a9770; /* jade    */
+  --color-data-4: #7e70dc; /* violeta */
+  --color-data-5: #b58412; /* âmbar   */
+  --color-data-6: #d44e70; /* rosa    */
+
+  /* ── Estado reservado (sempre com rótulo/ícone, nunca cor sozinha) ────── */
+  --color-state-good: #2a9770;
+  --color-state-warn: #b58412;
+  --color-state-serious: #d9622c;
+  --color-state-critical: #cf4340;
+  --color-state-idle: #6a707c;
+
+  /* ── Tipografia ───────────────────────────────────────────────────────── */
+  --font-display: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Inter Tight Variable', 'Inter Tight', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Escala tipográfica fluida — um só sistema do mobile ao ultrawide */
+  --text-micro: 0.6875rem;
+  --text-tiny: 0.75rem;
+  --text-small: 0.8125rem;
+  --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --text-lead: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --text-h3: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+  --text-h2: clamp(2rem, 1.4rem + 3vw, 4rem);
+  --text-h1: clamp(2.75rem, 1.5rem + 5.6vw, 7rem);
+  --text-mega: clamp(3.5rem, 0.5rem + 12vw, 15rem);
+
+  /* ── Ritmo e profundidade ─────────────────────────────────────────────── */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 24px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 18px 50px -24px rgb(0 0 0 / 0.9);
+  --shadow-float: 0 40px 120px -40px rgb(0 0 0 / 0.95);
+}
+
+/* ── Papéis semânticos: trocam de valor entre os dois modos ─────────────── */
+:root {
+  color-scheme: dark;
+
+  --surface-0: var(--color-ink);
+  --surface-1: var(--color-graphite);
+  --surface-2: var(--color-slate);
+  --hairline: var(--color-line);
+  --hairline-soft: var(--color-line-soft);
+
+  --text-primary: var(--color-bone);
+  --text-secondary: var(--color-ash);
+  --text-muted: var(--color-smoke);
+
+  --accent: var(--color-ember);
+  --accent-hot: var(--color-ember-hot);
+
+  --grid-line: rgb(255 255 255 / 0.045);
+  --glass: rgb(18 20 26 / 0.72);
+
+  /* Compensação de largura ótica: sobre fundo escuro o tipo "engorda" */
+  --optical-weight: 0;
+}
+
+/* O modo claro é escolhido, não invertido: os passos de dados são outros,
+   validados contra a superfície de papel. */
+[data-mode='light'] {
+  color-scheme: light;
+
+  --surface-0: var(--color-ivory);
+  --surface-1: var(--color-paper);
+  --surface-2: var(--color-parchment);
+  --hairline: rgb(8 9 11 / 0.14);
+  --hairline-soft: rgb(8 9 11 / 0.07);
+
+  --text-primary: #14161b;
+  --text-secondary: #4a4f59;
+  --text-muted: #757a84;
+
+  --accent: #c4551f;
+  --accent-hot: #d9622c;
+
+  --color-data-1: #c4551f;
+  --color-data-2: #2b6fbf;
+  --color-data-3: #1b7f5c;
+  --color-data-4: #6355c4;
+  --color-data-5: #8f6706;
+  --color-data-6: #be3c5c;
+
+  --color-state-good: #1b7f5c;
+  --color-state-warn: #8f6706;
+  --color-state-serious: #c4551f;
+  --color-state-critical: #b0332f;
+  --color-state-idle: #757a84;
+
+  --grid-line: rgb(8 9 11 / 0.05);
+  --glass: rgb(244 241 234 / 0.78);
+}

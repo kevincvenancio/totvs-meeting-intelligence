@@ -58,6 +58,14 @@ nbdist/
 # Java Flight Recorder
 *.jfr
 
+# Node / Front-End
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
 # OS files
 .DS_Store
 Thumbs.db

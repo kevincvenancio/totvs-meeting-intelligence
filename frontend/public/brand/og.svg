@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0e1015"/>
+      <stop offset="1" stop-color="#08090b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1"
+      gradientTransform="translate(920 470) rotate(-135) scale(520)">
+      <stop offset="0" stop-color="#d9622c" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#d9622c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="e" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff7a3d"/>
+      <stop offset="1" stop-color="#8f3a13"/>
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" stroke="#ffffff" stroke-opacity=".05" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g transform="translate(80 78)">
+    <path d="M22 0a22 22 0 1 1-15.56 6.44" stroke="url(#e)" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <circle cx="22" cy="22" r="12" stroke="#f2efe9" stroke-width="2" opacity=".45" fill="none"/>
+    <circle cx="22" cy="22" r="4" fill="#ff7a3d"/>
+  </g>
+  <text x="146" y="112" fill="#f2efe9" font-family="Inter Tight, system-ui, sans-serif"
+        font-size="26" font-weight="600" letter-spacing="-0.01em">Insight<tspan fill="#d9622c">360</tspan></text>
+
+  <text x="80" y="300" fill="#f2efe9" font-family="Instrument Serif, Georgia, serif" font-size="104">Toda reunião já</text>
+  <text x="80" y="404" fill="#f2efe9" font-family="Instrument Serif, Georgia, serif" font-size="104">contém a <tspan font-style="italic" fill="#d9622c">resposta</tspan>.</text>
+
+  <text x="80" y="500" fill="#9aa0ac" font-family="Inter Tight, system-ui, sans-serif" font-size="25">
+    Completude · Sentimento · Risco de churn · Plano de ação
+  </text>
+
+  <g font-family="JetBrains Mono, monospace" font-size="15" letter-spacing="2.4" fill="#6a707c">
+    <text x="80" y="570">REF: I360 — MEETING INTELLIGENCE</text>
+    <text x="1120" y="570" text-anchor="end">TOTVS</text>
+  </g>
+  <rect x="80" y="540" width="1040" height="1" fill="#242932"/>
+</svg>

@@ -18,6 +18,7 @@ reuniões (clientes, planos de ação e comentários).
 | **Camada de serviço com validações** | Bean Validation nos DTOs de entrada + regras de negócio nos serviços |
 | **Tratamento centralizado de exceções** | `@RestControllerAdvice` traduzindo exceções de domínio em respostas HTTP padronizadas |
 | **CLI preservada** | O menu de linha de comando continua funcionando, agora sob o perfil `cli` |
+| **Front-End** | Aplicação React + Vite em `frontend/`, consumindo a API, com painel, grade de reuniões, carteira, quadro de planos e importação |
 
 ## Pré-requisitos
 
@@ -43,6 +44,23 @@ A aplicação sobe em `http://localhost:8080`:
 
 No primeiro start, se não houver nenhum usuário cadastrado, é criado o administrador padrão
 **admin@insight360.com.br / admin123** (troque a senha em `PATCH /api/v1/usuarios/{id}/senha`).
+
+### Front-End
+
+A interface fica em [`frontend/`](frontend/) — página de apresentação com scroll em
+camadas e o aplicativo que consome a API.
+
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:5173
+```
+
+O Vite faz proxy de `/api` para `localhost:8080`, então a API acima já é consumida
+sem configuração. Se o back-end não estiver no ar, o front cai num conjunto de
+demonstração e avisa em tela — útil para trabalhar a interface sem depender do
+Oracle da FIAP. Detalhes de identidade visual, paleta e arquitetura em
+[`frontend/README.md`](frontend/README.md).
 
 ### Perfis disponíveis
 
