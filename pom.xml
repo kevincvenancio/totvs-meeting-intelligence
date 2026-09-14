@@ -14,8 +14,8 @@
     <groupId>br.com.totvs</groupId>
     <artifactId>totvs-meeting-intelligence</artifactId>
     <version>3.0.0</version>
-    <name>TOTVS Meeting Intelligence — API REST + CLI</name>
-    <description>TOTVS Meeting Intelligence — Plataforma de Inteligência Comercial sobre Reuniões</description>
+    <name>TOTVS Hermes — API REST + CLI</name>
+    <description>TOTVS Hermes — Plataforma de Inteligência Comercial sobre Reuniões</description>
 
     <properties>
         <java.version>17</java.version>
