@@ -1,5 +1,5 @@
 /* ============================================================================
-   Cliente da API REST do Insight360 (Spring Boot, /api/v1).
+   Cliente da API REST do Hermes (Spring Boot, /api/v1).
 
    Regra de ouro do projeto: o front nunca fica em branco. Se a API não estiver
    no ar — o backend depende do Oracle da FIAP — cada consulta cai num conjunto

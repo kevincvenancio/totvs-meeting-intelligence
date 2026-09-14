@@ -1,5 +1,5 @@
 /* ============================================================================
-   Insight360 — folha da página pública.
+   Hermes — folha da página pública.
    Ordem: layout · controles · chrome · seções · gráficos.
    ========================================================================== */
 
@@ -284,10 +284,6 @@
   font-size: 1.0625rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-}
-
-.logotipo-360 {
-  color: var(--accent);
 }
 
 .marca-arco {

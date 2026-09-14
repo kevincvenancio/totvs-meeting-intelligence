@@ -27,7 +27,7 @@
     <circle cx="22" cy="22" r="4" fill="#ff7a3d"/>
   </g>
   <text x="146" y="112" fill="#f2efe9" font-family="Inter Tight, system-ui, sans-serif"
-        font-size="26" font-weight="600" letter-spacing="-0.01em">Insight<tspan fill="#d9622c">360</tspan></text>
+        font-size="26" font-weight="600" letter-spacing="-0.01em">Hermes</text>
 
   <text x="80" y="300" fill="#f2efe9" font-family="Instrument Serif, Georgia, serif" font-size="104">Toda reunião já</text>
   <text x="80" y="404" fill="#f2efe9" font-family="Instrument Serif, Georgia, serif" font-size="104">contém a <tspan font-style="italic" fill="#d9622c">resposta</tspan>.</text>
@@ -37,7 +37,7 @@
   </text>
 
   <g font-family="JetBrains Mono, monospace" font-size="15" letter-spacing="2.4" fill="#6a707c">
-    <text x="80" y="570">REF: I360 — MEETING INTELLIGENCE</text>
+    <text x="80" y="570">REF: HMS — MEETING INTELLIGENCE</text>
     <text x="1120" y="570" text-anchor="end">TOTVS</text>
   </g>
   <rect x="80" y="540" width="1040" height="1" fill="#242932"/>

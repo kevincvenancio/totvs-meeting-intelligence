@@ -55,7 +55,7 @@ export function PlanosAcao() {
         id,
         status,
         status === 'CONCLUIDO' || status === 'CANCELADO'
-          ? 'Registrado pelo painel Insight360.'
+          ? 'Registrado pelo painel Hermes.'
           : undefined,
       ),
     onSettled: () => {

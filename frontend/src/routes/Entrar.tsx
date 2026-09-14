@@ -15,11 +15,11 @@ import { autenticacao, ApiError } from '../lib/api';
 import { CampoDeBrasa } from '../components/fx/EmberField';
 import { Marca } from '../components/brand/Logo';
 
-const CHAVE_SESSAO = 'insight360:usuario';
+const CHAVE_SESSAO = 'hermes:usuario';
 
 export function Entrar() {
   const navegar = useNavigate();
-  const [email, setEmail] = useState('admin@insight360.com.br');
+  const [email, setEmail] = useState('admin@hermes.com.br');
   const [senha, setSenha] = useState('admin123');
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
@@ -58,7 +58,7 @@ export function Entrar() {
           </Link>
 
           <header className="entrar-cabecalho">
-            <span className="ref">REF: I360 — ACESSO</span>
+            <span className="ref">REF: HMS — ACESSO</span>
             <h1 className="display entrar-titulo">Entrar</h1>
             <p className="lead">
               A API não usa token: o login valida as credenciais em BCrypt e devolve o usuário
@@ -103,7 +103,7 @@ export function Entrar() {
 
           <p className="entrar-dica">
             Credencial padrão criada no primeiro start:{' '}
-            <code>admin@insight360.com.br</code> / <code>admin123</code>. Troque em{' '}
+            <code>admin@hermes.com.br</code> / <code>admin123</code>. Troque em{' '}
             <code>PATCH /api/v1/usuarios/{'{id}'}/senha</code>.
           </p>
         </div>

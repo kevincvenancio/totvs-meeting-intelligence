@@ -1,5 +1,5 @@
 /* ============================================================================
-   Espelho TypeScript dos DTOs de resposta da API (br.com.totvs.insight360.dto).
+   Espelho TypeScript dos DTOs de resposta da API (br.com.totvs.hermes.dto).
    Mantido manualmente e alinhado a /v3/api-docs.
    ========================================================================== */
 

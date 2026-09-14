@@ -1,4 +1,4 @@
-# Insight360 — Front-End
+# Hermes — Front-End
 
 Interface da plataforma de *meeting intelligence*: uma página de apresentação com
 scroll em camadas e o aplicativo que consome a API REST em `/api/v1`.

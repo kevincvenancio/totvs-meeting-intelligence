@@ -1,4 +1,4 @@
-# TOTVS Meeting Intelligence — Insight360
+# TOTVS Meeting Intelligence — Hermes
 
 Sistema de inteligência comercial para análise automática de transcrições de reuniões TOTVS.
 Importa arquivos CSV com transcrições, classifica completude, extrai sentimento, risco de churn e
@@ -43,7 +43,7 @@ A aplicação sobe em `http://localhost:8080`:
 | Especificação OpenAPI (JSON) | http://localhost:8080/v3/api-docs |
 
 No primeiro start, se não houver nenhum usuário cadastrado, é criado o administrador padrão
-**admin@insight360.com.br / admin123** (troque a senha em `PATCH /api/v1/usuarios/{id}/senha`).
+**admin@hermes.com.br / admin123** (troque a senha em `PATCH /api/v1/usuarios/{id}/senha`).
 
 ### Front-End
 
@@ -73,7 +73,7 @@ Oracle da FIAP. Detalhes de identidade visual, paleta e arquitetura em
 | `mvn spring-boot:run -Dspring-boot.run.profiles=migracao` | H2 → Oracle | Copia os dados e encerra |
 
 No perfil `cli` o servidor web não é iniciado; no perfil `h2` o console fica em
-http://localhost:8080/h2-console (JDBC `jdbc:h2:file:./data/insight360`, usuário `sa`, sem senha).
+http://localhost:8080/h2-console (JDBC `jdbc:h2:file:./data/hermes`, usuário `sa`, sem senha).
 
 ## Banco de dados
 
@@ -110,7 +110,7 @@ objetos já existentes no schema do aluno. O DDL equivalente está versionado em
 ### Migração dos dados do H2 para o Oracle
 
 A base analisada que estava no H2 já foi migrada para o Oracle. A ferramenta que faz a cópia
-(`br.com.totvs.insight360.migracao.MigradorH2ParaOracle`) continua disponível e pode ser
+(`br.com.totvs.hermes.migracao.MigradorH2ParaOracle`) continua disponível e pode ser
 executada novamente:
 
 ```bash
@@ -288,7 +288,7 @@ devolve em `transicoesPermitidas` os status alcançáveis — o Front-End só ha
 # Login
 curl -X POST http://localhost:8080/api/v1/autenticacao/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@insight360.com.br","senha":"admin123"}'
+  -d '{"email":"admin@hermes.com.br","senha":"admin123"}'
 
 # Cadastro de cliente
 curl -X POST http://localhost:8080/api/v1/clientes \
@@ -351,10 +351,10 @@ mvn clean package -DskipTests
 mvn dependency:build-classpath -Dmdep.outputFile=cp.txt
 
 # Windows (separador ";")
-java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.insight360.model.ReuniaoTest
-java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.insight360.util.TextoUtilsTest
-java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.insight360.service.DuplicidadeServiceTest
-java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.insight360.service.ImportacaoLoteServiceTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.model.ReuniaoTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.util.TextoUtilsTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.DuplicidadeServiceTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ImportacaoLoteServiceTest
 ```
 
 ## Configuração
@@ -366,8 +366,8 @@ Principais propriedades em `src/main/resources/application.properties`:
 | `server.port` | `8080` | Porta da API |
 | `spring.datasource.url` | `jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL` | Conexão Oracle (ver variáveis de ambiente acima) |
 | `spring.datasource.hikari.maximum-pool-size` | `5` | Limite de conexões simultâneas |
-| `insight360.cors.origens` | `localhost:3000, 4200, 5173, 127.0.0.1:5500` | Origens liberadas para o Front-End |
-| `insight360.relatorios.diretorio` | `./relatorios` | Pasta onde os PDFs são gerados |
+| `hermes.cors.origens` | `localhost:3000, 4200, 5173, 127.0.0.1:5500` | Origens liberadas para o Front-End |
+| `hermes.relatorios.diretorio` | `./relatorios` | Pasta onde os PDFs são gerados |
 | `spring.servlet.multipart.max-file-size` | `50MB` | Tamanho máximo do CSV importado |
 | `spring.jpa.hibernate.ddl-auto` | `update` | Criação/atualização automática do schema |
 

@@ -92,7 +92,7 @@ export function Heroi() {
   }, []);
 
   return (
-    <section ref={raiz} id="heroi" className="heroi grain" aria-label="Insight360">
+    <section ref={raiz} id="heroi" className="heroi grain" aria-label="Hermes">
       {/* Camada 0 — brasa */}
       <CampoDeBrasa className="heroi-brasa" intensidade={intensidade} />
 
@@ -122,7 +122,7 @@ export function Heroi() {
 
         {/* Camada 4 — apoio */}
         <p className="heroi-apoio lead" data-profundidade="1.05">
-          O Insight360 lê a transcrição inteira, classifica completude, mede sentimento,
+          O Hermes lê a transcrição inteira, classifica completude, mede sentimento,
           calcula risco de churn e devolve o plano de ação — antes que o cliente peça a
           rescisão.
         </p>
@@ -148,7 +148,7 @@ export function Heroi() {
 
       {/* Camada 5 — rodapé de dados */}
       <div className="heroi-rodape">
-        <span className="ref">REF: I360 — 00</span>
+        <span className="ref">REF: HMS — 00</span>
 
         <ul className="heroi-dados">
           {DADOS_RODAPE.map((dado) => (

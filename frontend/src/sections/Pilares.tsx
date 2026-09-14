@@ -213,7 +213,7 @@ function DesenhoRelatorio() {
 
 const PILARES: Pilar[] = [
   {
-    ref: 'I360 — 01',
+    ref: 'HMS — 01',
     titulo: 'Importação',
     resumo:
       'Um CSV de até 50 MB entra e sai classificado. A duplicidade é detectada dentro do lote e contra tudo o que já foi importado antes.',
@@ -225,7 +225,7 @@ const PILARES: Pilar[] = [
     desenho: <DesenhoImportacao />,
   },
   {
-    ref: 'I360 — 02',
+    ref: 'HMS — 02',
     titulo: 'Análise',
     resumo:
       'Cada transcrição recebe pontuação de completude, sentimento com justificativa, risco de churn e dois scores — qualidade e comercial.',
@@ -237,7 +237,7 @@ const PILARES: Pilar[] = [
     desenho: <DesenhoAnalise />,
   },
   {
-    ref: 'I360 — 03',
+    ref: 'HMS — 03',
     titulo: 'Acompanhamento',
     resumo:
       'O insight vira plano de ação com responsável e prazo. O ciclo de vida é do próprio domínio: o enum conhece as próprias transições.',
@@ -249,7 +249,7 @@ const PILARES: Pilar[] = [
     desenho: <DesenhoAcompanhamento />,
   },
   {
-    ref: 'I360 — 04',
+    ref: 'HMS — 04',
     titulo: 'Relatório',
     resumo:
       'O que a diretoria lê. PDF executivo consolidado, por reunião ou por lote — gerado a partir dos mesmos dados que alimentam o painel.',
@@ -335,7 +335,7 @@ export function Pilares() {
         {/* Painel de abertura da travessia */}
         <article className="pilar pilar--abertura">
           <div className="pilar-texto">
-            <span className="ref">REF: I360 — PLATAFORMA</span>
+            <span className="ref">REF: HMS — PLATAFORMA</span>
             <h3 className="display pilar-abertura-titulo">
               Quatro etapas
               <br />

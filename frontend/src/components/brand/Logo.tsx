@@ -1,4 +1,4 @@
-/* Marca do Insight360.
+/* Marca do Hermes.
 
    O símbolo é uma abertura: um anel interrompido exatamente onde o sinal
    entra. O ponto quente no centro é o insight — o que sobrou depois que a
@@ -46,7 +46,7 @@ export function Logotipo({ tamanho = 26, className }: { tamanho?: number; classN
     <span className={`logotipo ${className ?? ''}`}>
       <Marca tamanho={tamanho} vivo />
       <span className="logotipo-texto">
-        Insight<span className="logotipo-360">360</span>
+        Hermes
       </span>
     </span>
   );

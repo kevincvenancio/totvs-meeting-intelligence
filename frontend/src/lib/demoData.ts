@@ -363,7 +363,7 @@ const TITULOS_PLANO = [
 const RESPONSAVEIS: Usuario[] = VENDEDORES.slice(0, 6).map((nome, i) => ({
   id: i + 1,
   nome,
-  email: `${nome.toLowerCase().split(' ')[0]}@insight360.com.br`,
+  email: `${nome.toLowerCase().split(' ')[0]}@hermes.com.br`,
   perfil: i === 0 ? 'GESTOR' : 'VENDEDOR',
   perfilDescricao: i === 0 ? 'Gestor Comercial' : 'Vendedor',
   cargo: i === 0 ? 'Gerente de contas' : 'Executivo de contas',
@@ -666,8 +666,8 @@ export function reunioesDoCliente(id: number): ReuniaoResumo[] {
 export function usuarioDemo(email: string): Usuario {
   return {
     id: 1,
-    nome: 'Administrador Insight360',
-    email: email || 'admin@insight360.com.br',
+    nome: 'Administrador Hermes',
+    email: email || 'admin@hermes.com.br',
     perfil: 'ADMIN',
     perfilDescricao: 'Administrador',
     cargo: 'Administrador da plataforma',

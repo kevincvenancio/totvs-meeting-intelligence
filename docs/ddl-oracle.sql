@@ -1,5 +1,5 @@
 -- =====================================================================
--- TOTVS Insight360 - DDL do schema Oracle
+-- TOTVS Hermes - DDL do schema Oracle
 -- =====================================================================
 -- Gerado a partir do mapeamento JPA (Hibernate schema-generation) para
 -- Oracle Database 19c. A aplicacao cria/atualiza o schema sozinha com

@@ -49,9 +49,9 @@ interface Props {
 
 export function Tela({ titulo, chapeu, descricao, acoes, children, largo }: Props) {
   useEffect(() => {
-    document.title = `${titulo} — Insight360`;
+    document.title = `${titulo} — Hermes`;
     return () => {
-      document.title = 'Insight360 — Meeting Intelligence · TOTVS';
+      document.title = 'Hermes — Meeting Intelligence · TOTVS';
     };
   }, [titulo]);
 

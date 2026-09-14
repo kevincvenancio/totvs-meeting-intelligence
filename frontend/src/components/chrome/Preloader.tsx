@@ -68,7 +68,7 @@ export function Preloader({ aoTerminar }: { aoTerminar?: () => void }) {
           </div>
 
           <div className="preloader-meio">
-            <span className="eyebrow">Insight360 · Meeting Intelligence</span>
+            <span className="eyebrow">Hermes · Meeting Intelligence</span>
             <span className="preloader-contador numeric">{String(contagem).padStart(3, '0')}</span>
           </div>
 

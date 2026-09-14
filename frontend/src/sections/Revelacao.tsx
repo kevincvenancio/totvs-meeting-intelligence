@@ -76,7 +76,7 @@ export function Revelacao() {
       <div className="revelacao-quadro">
         {/* Camada escura — o que estava valendo até aqui */}
         <div className="revelacao-escuro grain">
-          <p className="ref">REF: I360 — 06</p>
+          <p className="ref">REF: HMS — 06</p>
           <h2 className="display revelacao-chamada">
             E então isso
             <br />

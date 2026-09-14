@@ -7,7 +7,7 @@
 
 import { useEffect, useState } from 'react';
 
-const CHAVE = 'insight360:modo';
+const CHAVE = 'hermes:modo';
 type Modo = 'dark' | 'light';
 
 function modoInicial(): Modo {

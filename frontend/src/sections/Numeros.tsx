@@ -55,7 +55,7 @@ export function Numeros() {
     <section id="numeros" className="numeros" aria-labelledby="numeros-titulo">
       <div className="numeros-interior">
         <header className="numeros-cabecalho">
-          <span className="ref">REF: I360 — 05</span>
+          <span className="ref">REF: HMS — 05</span>
           <h2 id="numeros-titulo" className="display numeros-titulo">
             Escala <em>medida</em>,
             <br />

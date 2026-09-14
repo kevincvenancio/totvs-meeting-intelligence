@@ -77,7 +77,7 @@ export function Risco() {
 
         <div className="risco-conteudo">
           <header className="risco-cabecalho">
-            <span className="ref">REF: I360 — 04</span>
+            <span className="ref">REF: HMS — 04</span>
             <h2 id="risco-titulo" className="display risco-titulo">
               O churn não
               <br />

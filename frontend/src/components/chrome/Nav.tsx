@@ -64,7 +64,7 @@ export function Navegacao() {
   return (
     <header ref={barra} className="nav" data-aberto={aberto || undefined}>
       <div className="nav-interior">
-        <Link to="/" className="nav-marca" aria-label="Insight360 — início">
+        <Link to="/" className="nav-marca" aria-label="Hermes — início">
           <Logotipo />
         </Link>
 

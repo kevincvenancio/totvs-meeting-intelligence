@@ -13,7 +13,7 @@ import { Faixa } from '../components/fx/Marquee';
 import { Magnetico, TextoRevelado } from '../components/fx/primitives';
 import { Marca } from '../components/brand/Logo';
 
-const EMAIL = 'admin@insight360.com.br';
+const EMAIL = 'admin@hermes.com.br';
 
 const COLUNAS = [
   {
@@ -81,7 +81,7 @@ export function Rodape() {
     <footer ref={raiz} id="contato" className="rodape" data-mode="light">
       <Faixa velocidade={34} className="rodape-faixa">
         <span className="rodape-faixa-texto display">
-          Toda reunião já contém a resposta&nbsp;&nbsp;·&nbsp;&nbsp;Insight360&nbsp;&nbsp;·&nbsp;&nbsp;
+          Toda reunião já contém a resposta&nbsp;&nbsp;·&nbsp;&nbsp;Hermes&nbsp;&nbsp;·&nbsp;&nbsp;
           Meeting Intelligence&nbsp;&nbsp;·&nbsp;&nbsp;
         </span>
       </Faixa>
@@ -115,7 +115,7 @@ export function Rodape() {
           <div className="rodape-marca">
             <Marca tamanho={30} />
             <p className="rodape-descricao">
-              Insight360 — inteligência comercial sobre transcrições de reunião. API REST em{' '}
+              Hermes — inteligência comercial sobre transcrições de reunião. API REST em{' '}
               <span className="numeric">/api/v1</span>, 31 recursos e 44 operações documentadas.
             </p>
           </div>
@@ -165,22 +165,22 @@ export function Rodape() {
 
         {/* Assinatura em escala máxima */}
         <div className="rodape-assinatura" aria-hidden="true">
-          <svg viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid meet">
+          <svg viewBox="0 0 698 150" preserveAspectRatio="xMidYMid meet">
             <text
-              x="500"
+              x="349"
               y="118"
               textAnchor="middle"
               className="rodape-assinatura-texto"
               fill="currentColor"
             >
-              INSIGHT360
+              HERMES
             </text>
           </svg>
         </div>
 
         <div className="rodape-base">
-          <span className="ref">© {new Date().getFullYear()} TOTVS · Insight360 v3.0</span>
-          <span className="ref">REF: I360 — FIM</span>
+          <span className="ref">© {new Date().getFullYear()} TOTVS · Hermes v3.0</span>
+          <span className="ref">REF: HMS — FIM</span>
         </div>
       </div>
     </footer>
