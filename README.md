@@ -23,16 +23,24 @@ reuniões (clientes, planos de ação e comentários).
 ## Pré-requisitos
 
 - Java 17 ou superior
-- Maven 3.6+
 - Acesso ao Oracle da FIAP (`oracle.fiap.com.br:1521/ORCL`) — ou use o perfil `h2` para trabalhar offline
+
+Maven não precisa estar instalado: o projeto traz o **Maven Wrapper** (`mvnw`), que baixa a
+versão correta (3.9.16) na primeira execução. Nos comandos abaixo, use `./mvnw` no Linux, macOS
+e Git Bash; no PowerShell, `.\mvnw`; no `cmd`, `mvnw`. Quem já tem o Maven no `PATH` pode
+trocar por `mvn` que o resultado é o mesmo.
+
+> Passo a passo detalhado para quem vai rodar o projeto pela primeira vez (instalação dos
+> pré-requisitos, ordem dos comandos nos dois terminais e problemas comuns):
+> [`COMO-RODAR.md`](COMO-RODAR.md).
 
 ## Como executar
 
 ### API REST + Oracle (padrão)
 
 ```bash
-mvn clean package -DskipTests
-mvn spring-boot:run
+./mvnw clean package -DskipTests
+./mvnw spring-boot:run
 ```
 
 A aplicação sobe em `http://localhost:8080`:
@@ -66,11 +74,13 @@ Oracle da FIAP. Detalhes de identidade visual, paleta e arquitetura em
 
 | Comando | Banco | Interface |
 |---------|-------|-----------|
-| `mvn spring-boot:run` | Oracle FIAP | API REST |
-| `mvn spring-boot:run -Dspring-boot.run.profiles=h2` | H2 em arquivo (`./data`) | API REST + console H2 |
-| `mvn spring-boot:run -Dspring-boot.run.profiles=cli` | Oracle FIAP | Menu de linha de comando |
-| `mvn spring-boot:run -Dspring-boot.run.profiles=cli,h2` | H2 em arquivo | Menu de linha de comando |
-| `mvn spring-boot:run -Dspring-boot.run.profiles=migracao` | H2 → Oracle | Copia os dados e encerra |
+| `./mvnw spring-boot:run` | Oracle FIAP | API REST |
+| `./mvnw spring-boot:run -Dspring-boot.run.profiles=h2` | H2 em arquivo (`./data`) | API REST + console H2 |
+| `./mvnw spring-boot:run -Dspring-boot.run.profiles=cli` | Oracle FIAP | Menu de linha de comando |
+| `./mvnw spring-boot:run -Dspring-boot.run.profiles=cli,h2` | H2 em arquivo | Menu de linha de comando |
+| `./mvnw spring-boot:run -Dspring-boot.run.profiles=migracao` | H2 → Oracle | Copia os dados e encerra |
+
+> No PowerShell o argumento precisa de aspas: `.\mvnw spring-boot:run "-Dspring-boot.run.profiles=h2"`.
 
 No perfil `cli` o servidor web não é iniciado; no perfil `h2` o console fica em
 http://localhost:8080/h2-console (JDBC `jdbc:h2:file:./data/hermes`, usuário `sa`, sem senha).
@@ -91,10 +101,17 @@ sem recompilar:
 | `ORACLE_SENHA` | senha do portal |
 
 ```bash
-# exemplo com credenciais fora do código-fonte
+# exemplo com credenciais fora do código-fonte (cmd do Windows)
 set ORACLE_USUARIO=rm999999
 set ORACLE_SENHA=minhaSenha
-mvn spring-boot:run
+mvnw spring-boot:run
+```
+
+```powershell
+# o mesmo no PowerShell
+$env:ORACLE_USUARIO = "rm999999"
+$env:ORACLE_SENHA   = "minhaSenha"
+.\mvnw spring-boot:run
 ```
 
 O driver é o `com.oracle.database.jdbc:ojdbc11` e o dialeto é detectado automaticamente pelo
@@ -114,7 +131,7 @@ A base analisada que estava no H2 já foi migrada para o Oracle. A ferramenta qu
 executada novamente:
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=migracao
+./mvnw spring-boot:run -Dspring-boot.run.profiles=migracao
 ```
 
 Como funciona:
@@ -347,8 +364,8 @@ nas validações, a lista `campos`):
 Os testes seguem o padrão adotado no projeto: classes com `main()` e `try/catch`, sem framework.
 
 ```bash
-mvn clean package -DskipTests
-mvn dependency:build-classpath -Dmdep.outputFile=cp.txt
+./mvnw clean package -DskipTests
+./mvnw dependency:build-classpath -Dmdep.outputFile=cp.txt
 
 # Windows (separador ";")
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.model.ReuniaoTest

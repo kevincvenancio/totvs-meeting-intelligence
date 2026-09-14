@@ -12,7 +12,7 @@ npm run dev      # http://localhost:5173
 ```
 
 O Vite faz proxy de `/api` para `http://localhost:8080`, então basta subir a API
-Spring em paralelo (`mvn spring-boot:run`) para ver a base real.
+Spring em paralelo (`./mvnw spring-boot:run` na raiz do projeto) para ver a base real.
 
 **Sem a API no ar o front continua funcionando**: cada consulta cai num conjunto de
 demonstração determinístico (`src/lib/demoData.ts`) e a interface avisa em uma faixa
