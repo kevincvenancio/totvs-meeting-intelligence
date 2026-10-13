@@ -1,0 +1,11 @@
+.git
+.idea
+.mvn
+mvnw
+mvnw.cmd
+target
+frontend
+data
+relatorios
+docs
+**/application-local.properties

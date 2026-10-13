@@ -1,0 +1,16 @@
+# Blueprint do Render: cria o servico da API a partir deste repositorio.
+# As credenciais do Oracle sao pedidas no painel na criacao (sync: false).
+services:
+  - type: web
+    name: hermes-api
+    runtime: docker
+    plan: free
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /v3/api-docs
+    autoDeploy: true
+    envVars:
+      - key: ORACLE_USUARIO
+        sync: false
+      - key: ORACLE_SENHA
+        sync: false
