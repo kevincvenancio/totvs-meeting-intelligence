@@ -494,19 +494,45 @@ public class AnaliseTranscricaoService {
     }
 
     private String identificarBudget(String texto, List<Insight> intuicoes, Reuniao r) {
-        Pattern p = Pattern.compile(
-                "R\\$\\s*[\\d.,]+(?:\\s*(?:mil|k|milhão|milhões))?|\\d+\\s*(?:mil|k|milhões)(?:\\s+reais)?",
-                Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(texto);
-        if (m.find()) {
-            String val = m.group();
+        String val = encontrarValorFinanceiro(texto);
+        if (val != null) {
             adicionarInsight(intuicoes, r,
                     "Budget identificado",
                     "Valor financeiro mencionado: " + val,
                     "ALTA",
                     TextoUtils.extrairTrecho(texto, val, 100),
                     95);
-            return val;
+        }
+        return val;
+    }
+
+    /** Número com ordem de grandeza; "milhões" antes de "mil" para não truncar o valor. */
+    private static final Pattern VALOR = Pattern.compile(
+            "R\\$\\s*\\d+(?:[.,]\\d+)*(?:\\s*(?:milhões|milhão|mil|k)\\b)?"
+                    + "|\\b\\d+(?:[.,]\\d+)*\\s*(?:milhões|milhão|mil|k)\\b(?:\\s+(?:de\\s+)?reais)?",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+
+    /** Palavras que, logo antes do número, indicam que ele é dinheiro. */
+    private static final Pattern CONTEXTO_FINANCEIRO = Pattern.compile(
+            "(valor|custo|custa|investimento|investir|orçamento|budget|preço|mensalidade|pagar|paga|pago|"
+                    + "gasto|gastar|gasta|economia|economizar|faturamento|fatura|ticket|desconto|proposta|"
+                    + "receita|prejuízo|multa|reais)\\b[^.?!]{0,25}$",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+
+    /**
+     * Primeiro valor em dinheiro citado na transcrição. Um número como "3 mil" só conta
+     * com "R$", com "reais" depois ou com uma palavra financeira logo antes — sem isso,
+     * "3 mil colaboradores" ou "5 mil notas" viravam orçamento.
+     */
+    static String encontrarValorFinanceiro(String texto) {
+        if (texto == null) return null;
+        Matcher m = VALOR.matcher(texto);
+        while (m.find()) {
+            String val = m.group().trim();
+            String lower = val.toLowerCase();
+            boolean monetario = lower.startsWith("r$") || lower.endsWith("reais")
+                    || CONTEXTO_FINANCEIRO.matcher(texto.substring(Math.max(0, m.start() - 40), m.start())).find();
+            if (monetario) return val;
         }
         return null;
     }
