@@ -30,6 +30,9 @@ public class FeedbackReuniaoService {
     public void gerarFeedback(Reuniao reuniao) {
         feedbackRepository.findByReuniaoId(reuniao.getId())
                 .ifPresent(feedbackRepository::delete);
+        // O Hibernate executa inserts antes de deletes no flush; sem isso o feedback
+        // novo colide com o antigo na restrição única de reuniao_id (ORA-00001).
+        feedbackRepository.flush();
 
         FeedbackReuniao fb = new FeedbackReuniao();
         fb.setReuniao(reuniao);
