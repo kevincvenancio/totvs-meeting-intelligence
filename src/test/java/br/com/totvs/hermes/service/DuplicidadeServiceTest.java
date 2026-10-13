@@ -1,6 +1,7 @@
 package br.com.totvs.hermes.service;
 
 import br.com.totvs.hermes.model.Reuniao;
+import br.com.totvs.hermes.repository.IndicadoresReuniao;
 import br.com.totvs.hermes.repository.ReuniaoRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,7 @@ public class DuplicidadeServiceTest {
         }
         // ── Métodos não utilizados neste teste ───────────────────────
         @Override public @NonNull List<Reuniao> findByAnalisadaTrue() { throw new UnsupportedOperationException(); }
+        @Override public @NonNull List<IndicadoresReuniao> findIndicadoresAnalisadas() { throw new UnsupportedOperationException(); }
         @Override public @NonNull List<Reuniao> findByClienteContainingIgnoreCase(@NonNull String c) { throw new UnsupportedOperationException(); }
         @Override public @NonNull List<Reuniao> findByAltoRiscoChurn() { throw new UnsupportedOperationException(); }
         @Override public @NonNull List<Reuniao> findAllAnalisadasOrderByScore() { throw new UnsupportedOperationException(); }

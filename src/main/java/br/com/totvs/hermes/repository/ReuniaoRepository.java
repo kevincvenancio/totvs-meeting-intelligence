@@ -13,6 +13,15 @@ public interface ReuniaoRepository extends JpaRepository<Reuniao, Long> {
 
     List<Reuniao> findByAnalisadaTrue();
 
+    /** Colunas usadas pelo dashboard, sem CLOBs: ver {@link IndicadoresReuniao}. */
+    @Query("""
+            SELECT new br.com.totvs.hermes.repository.IndicadoresReuniao(
+                r.id, r.cliente, r.riscoChurn, r.sentimento, r.scoreQualidade, r.scoreComercial,
+                r.produtosIdentificados, r.concorrentesIdentificados, r.categoriasPrincipais,
+                CASE WHEN LENGTH(r.oportunidades) > 0 THEN 1 ELSE 0 END)
+            FROM Reuniao r WHERE r.analisada = true ORDER BY r.id""")
+    List<IndicadoresReuniao> findIndicadoresAnalisadas();
+
     List<Reuniao> findByClienteContainingIgnoreCase(String cliente);
 
     @Query("SELECT r FROM Reuniao r WHERE r.riscoChurn = 'ALTO' AND r.analisada = true AND (r.duplicada = false OR r.duplicada IS NULL) ORDER BY r.scoreComercial DESC")
