@@ -39,8 +39,11 @@ const ORDENACOES = [
 export function Reunioes() {
   const [parametros, definirParametros] = useSearchParams();
 
+  const clienteId = Number(parametros.get('clienteId')) || undefined;
+
   const filtro: FiltroReuniao = {
     termo: parametros.get('termo') ?? undefined,
+    clienteId,
     sentimento: parametros.get('sentimento') ?? undefined,
     riscoChurn: parametros.get('riscoChurn') ?? undefined,
     statusCompletude: parametros.get('statusCompletude') ?? undefined,
@@ -65,7 +68,7 @@ export function Reunioes() {
     definirParametros(proximos, { replace: true });
   }
 
-  const temFiltro = ['termo', 'sentimento', 'riscoChurn', 'statusCompletude'].some((c) =>
+  const temFiltro = ['termo', 'clienteId', 'sentimento', 'riscoChurn', 'statusCompletude'].some((c) =>
     parametros.get(c),
   );
 

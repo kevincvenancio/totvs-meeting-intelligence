@@ -102,3 +102,6 @@ data/
 
 # Relatorios PDF gerados pela aplicacao
 relatorios/
+
+# Dados de demonstracao (seed e ids criados)
+scripts/demo/
