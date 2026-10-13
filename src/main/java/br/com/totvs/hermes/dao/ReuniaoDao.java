@@ -3,7 +3,9 @@ package br.com.totvs.hermes.dao;
 import br.com.totvs.hermes.dto.filtro.FiltroReuniao;
 import br.com.totvs.hermes.model.Reuniao;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -32,6 +34,9 @@ public interface ReuniaoDao extends GenericDao<Reuniao, Long> {
 
     /** Quantidade de reuniões vinculadas a um cliente cadastrado. */
     long contarPorCliente(Long clienteId);
+
+    /** Quantidade de reuniões por cliente, numa consulta só (id do cliente → total). */
+    Map<Long, Long> contarPorClientes(Collection<Long> clienteIds);
 
     /** Desfaz o vínculo das reuniões com um cliente que será removido. */
     int desvincularCliente(Long clienteId);

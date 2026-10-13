@@ -7,6 +7,7 @@ import br.com.totvs.hermes.model.Cliente;
 import br.com.totvs.hermes.model.StatusCliente;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Conversões entre {@link Cliente} e seus DTOs (padrão Mapper/Assembler).
@@ -73,8 +74,11 @@ public final class ClienteMapper {
     }
 
     /** Converte a listagem sem o contador de reuniões, que exigiria uma consulta por item. */
-    public static List<ClienteResposta> paraLista(List<Cliente> clientes) {
-        return clientes.stream().map(cliente -> paraResposta(cliente, null)).toList();
+    /** @param totaisReunioes quantidade de reuniões por id do cliente (ausente = 0) */
+    public static List<ClienteResposta> paraLista(List<Cliente> clientes, Map<Long, Long> totaisReunioes) {
+        return clientes.stream()
+                .map(cliente -> paraResposta(cliente, totaisReunioes.getOrDefault(cliente.getId(), 0L)))
+                .toList();
     }
 
     private static String textoOuNulo(String valor) {

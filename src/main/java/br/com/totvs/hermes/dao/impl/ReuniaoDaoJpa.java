@@ -6,6 +6,7 @@ import br.com.totvs.hermes.dto.filtro.FiltroReuniao;
 import br.com.totvs.hermes.model.Reuniao;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,21 @@ public class ReuniaoDaoJpa extends AbstractJpaDao<Reuniao, Long> implements Reun
     public long contarPorCliente(Long clienteId) {
         return contarPor("SELECT COUNT(r) FROM Reuniao r WHERE r.clienteVinculado.id = :clienteId",
                 Map.of("clienteId", clienteId));
+    }
+
+    @Override
+    public Map<Long, Long> contarPorClientes(Collection<Long> clienteIds) {
+        if (clienteIds.isEmpty()) {
+            return Map.of();
+        }
+        Map<Long, Long> totais = new HashMap<>();
+        gerenciadorEntidades
+                .createQuery("SELECT r.clienteVinculado.id, COUNT(r) FROM Reuniao r "
+                        + "WHERE r.clienteVinculado.id IN :ids GROUP BY r.clienteVinculado.id", Object[].class)
+                .setParameter("ids", clienteIds)
+                .getResultList()
+                .forEach(linha -> totais.put((Long) linha[0], (Long) linha[1]));
+        return totais;
     }
 
     @Override

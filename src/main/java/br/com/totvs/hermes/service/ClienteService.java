@@ -115,6 +115,11 @@ public class ClienteService {
         return reuniaoDao.contarPorCliente(clienteId);
     }
 
+    /** Quantidade de reuniões de cada cliente da lista (id do cliente → total). */
+    public Map<Long, Long> contarReunioes(List<Cliente> clientes) {
+        return reuniaoDao.contarPorClientes(clientes.stream().map(Cliente::getId).toList());
+    }
+
     /** Distribuição da carteira por situação — usada no dashboard. */
     public Map<StatusCliente, Long> contarPorStatus() {
         Map<StatusCliente, Long> totais = new EnumMap<>(StatusCliente.class);

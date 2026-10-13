@@ -54,8 +54,9 @@ public class ClienteController {
             @Min(value = 1, message = "O tamanho mínimo da página é 1.")
             @Max(value = 100, message = "O tamanho máximo da página é 100.") int tamanho) {
 
+        List<Cliente> clientes = clienteService.pesquisar(termo, status, uf, pagina, tamanho);
         List<ClienteResposta> conteudo =
-                ClienteMapper.paraLista(clienteService.pesquisar(termo, status, uf, pagina, tamanho));
+                ClienteMapper.paraLista(clientes, clienteService.contarReunioes(clientes));
         long total = clienteService.contarPesquisa(termo, status, uf);
         return ResponseEntity.ok(PaginaResposta.de(conteudo, pagina, tamanho, total));
     }
