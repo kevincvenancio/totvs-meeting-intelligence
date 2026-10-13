@@ -391,3 +391,5 @@ Principais propriedades em `src/main/resources/application.properties`:
 > As credenciais da FIAP estão no `application.properties` para facilitar a execução e a correção
 > do trabalho. Se o repositório for tornado público, remova os valores padrão e passe usuário e
 > senha apenas pelas variáveis de ambiente `ORACLE_USUARIO` / `ORACLE_SENHA`.
+> 
+> Integrantes do Grupo:   Nicolas Barnabe da Cruz – RM: 561997   Luiz Antônio Moraes Santos – RM: 562142   Kevin Carvalho Venâncio - RM: 561459   Guilherme de Melo Sorrilha – RM: 563825   Yan Breno Barutti Conceição - RM: 566412 
