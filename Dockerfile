@@ -11,7 +11,10 @@ RUN mvn -q -B package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-# O plano gratis do Render tem 512 MB de RAM: limita o heap para caber.
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 -XX:+UseSerialGC -Xss512k"
+# O plano gratis do Render tem 512 MB de RAM no total. Heap fixo em 256 MB e
+# metaspace/code cache limitados para o processo inteiro caber; menos threads
+# do Tomcat e JIT so no nivel 1 (sobe mais rapido na CPU fraca do plano).
+ENV JAVA_TOOL_OPTIONS="-Xmx256m -Xss512k -XX:MaxMetaspaceSize=160m -XX:ReservedCodeCacheSize=48m -XX:+UseSerialGC -XX:TieredStopAtLevel=1"
+ENV SERVER_TOMCAT_THREADS_MAX=20
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
