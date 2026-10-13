@@ -248,7 +248,7 @@ export const planosAcao = {
   transicionar: (id: number, status: StatusPlanoAcao, resultado?: string) =>
     bruto<PlanoAcao>(`/planos-acao/${id}/status`, {
       method: 'PATCH',
-      body: JSON.stringify({ status, resultado }),
+      body: JSON.stringify({ novoStatus: status, resultado }),
     }),
 };
 
