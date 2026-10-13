@@ -1975,6 +1975,12 @@
   color: var(--text-primary);
 }
 
+/* Palavra no miolo ("Oportunidade") precisa caber no furo de ~134px. */
+.rosca-miolo-valor--texto {
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
 .rosca-miolo-rotulo {
   font-size: var(--text-micro);
   color: var(--text-muted);

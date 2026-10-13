@@ -139,7 +139,11 @@ export function Rosca({
           </svg>
 
           <div className="rosca-miolo">
-            <span className="rosca-miolo-valor numeric">
+            <span
+              className={`rosca-miolo-valor numeric${
+                miolo && /[a-zA-Z]{4,}/.test(miolo.valor) ? ' rosca-miolo-valor--texto' : ''
+              }`}
+            >
               {miolo?.valor ?? `${Math.round((dominante.valor / total) * 100)}%`}
             </span>
             <span className="rosca-miolo-rotulo">{miolo?.rotulo ?? dominante.rotulo}</span>
