@@ -1,92 +1,44 @@
 /* ============================================================================
-   Página inicial — a sequência inteira de camadas.
+   Página inicial — o material do pitch.
 
-   A ordem não é arbitrária: herói (promessa) → faixa (respiro) → escuta
-   (demonstração) → camadas (profundidade) → pilares (plataforma) → risco
-   (consequência) → números (prova) → revelação (virada de material) →
-   rodapé (convite). Cada seção prepara a próxima.
+   Cinco blocos de tela cheia, na ordem do roteiro da apresentação:
+   problema → por que vale dinheiro → o que construímos → três níveis →
+   impacto e entrada no painel. O passador de slides avança item a item
+   dentro de cada bloco (ver ProvedorApresentacao); rolando com o mouse, a
+   página funciona como uma landing comum.
    ========================================================================== */
 
-import { Faixa } from '../components/fx/Marquee';
 import { TrilhoDeIndice, type Marco } from '../components/chrome/ScrollRail';
-import { Heroi } from '../sections/Hero';
-import { Escuta } from '../sections/Escuta';
-import { Camadas } from '../sections/Camadas';
-import { Pilares } from '../sections/Pilares';
-import { Risco } from '../sections/Risco';
-import { Numeros } from '../sections/Numeros';
-import { Revelacao } from '../sections/Revelacao';
+import { ProvedorApresentacao } from '../components/chrome/Apresentacao';
+import { ROTEIRO } from '../lib/roteiro';
+import { Problema } from '../sections/pitch/Problema';
+import { Valor } from '../sections/pitch/Valor';
+import { Pipeline } from '../sections/pitch/Pipeline';
+import { Niveis } from '../sections/pitch/Niveis';
+import { Impacto } from '../sections/pitch/Impacto';
 import { Rodape } from '../sections/Rodape';
 
 const MARCOS: Marco[] = [
-  { id: 'heroi', rotulo: 'Abertura', ref: '00' },
-  { id: 'escuta', rotulo: 'A escuta', ref: '01' },
-  { id: 'camadas', rotulo: 'As camadas', ref: '02' },
-  { id: 'pilares', rotulo: 'A plataforma', ref: '03' },
-  { id: 'risco', rotulo: 'O risco', ref: '04' },
-  { id: 'numeros', rotulo: 'A escala', ref: '05' },
-  { id: 'revelacao', rotulo: 'O painel', ref: '06' },
-  { id: 'contato', rotulo: 'Contato', ref: '07' },
-];
-
-/* Vocabulário do domínio, correndo. Serve de respiro entre a promessa do
-   herói e a demonstração — e já introduz os termos que as próximas seções
-   vão usar sem explicar de novo. */
-const LEXICO = [
-  'completude',
-  'sentimento',
-  'risco de churn',
-  'score comercial',
-  'plano de ação',
-  'insight',
-  'feedback educativo',
-  'carteira',
-  'lote de importação',
-  'trecho de origem',
+  ...ROTEIRO.map(({ id, rotulo, ref }) => ({ id, rotulo, ref })),
+  { id: 'contato', rotulo: 'Contato', ref: '06' },
 ];
 
 export function Landing() {
   return (
-    <>
+    <ProvedorApresentacao>
       <TrilhoDeIndice marcos={MARCOS} />
 
       <main id="conteudo">
-        <Heroi />
-
-        <div className="lexico" aria-hidden="true">
-          <Faixa velocidade={38}>
-            <span className="lexico-linha">
-              {LEXICO.map((termo) => (
-                <span key={termo} className="lexico-termo">
-                  {termo}
-                  <span className="lexico-separador">✳</span>
-                </span>
-              ))}
-            </span>
-          </Faixa>
-          <Faixa velocidade={-26} className="lexico-inversa">
-            <span className="lexico-linha lexico-linha--fina">
-              {['/api/v1/reunioes', '/api/v1/dashboard', '/api/v1/planos-acao', '/api/v1/importacoes', '/api/v1/relatorios'].map(
-                (rota) => (
-                  <span key={rota} className="lexico-rota numeric">
-                    {rota}
-                    <span className="lexico-separador">·</span>
-                  </span>
-                ),
-              )}
-            </span>
-          </Faixa>
+        <div id="pitch">
+          <Problema />
+          <Valor />
+          <Pipeline />
+          <Niveis />
+          <Impacto />
         </div>
-
-        <Escuta />
-        <Camadas />
-        <Pilares />
-        <Risco />
-        <Numeros />
-        <Revelacao />
       </main>
 
       <Rodape />
-    </>
+    </ProvedorApresentacao>
   );
 }

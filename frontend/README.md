@@ -1,7 +1,7 @@
 # Hermes — Front-End
 
-Interface da plataforma de *meeting intelligence*: uma página de apresentação com
-scroll em camadas e o aplicativo que consome a API REST em `/api/v1`.
+Interface da plataforma de *meeting intelligence*: a página inicial, que é o material
+do pitch (substitui o PowerPoint), e o aplicativo que consome a API REST em `/api/v1`.
 
 ## Executar
 
@@ -68,37 +68,56 @@ série de gráfico; sempre aparecem com rótulo por escrito ao lado, nunca sozin
 
 ```
 src/
-  lib/          motion (GSAP + Lenis), api, types, demoData, format
+  lib/          motion (GSAP + Lenis), api, types, demoData, format, roteiro do pitch
   components/
     brand/      marca, logotipo, órbitas
-    chrome/     preloader, cursor, navegação, trilho de índice, grão, modo
-    fx/         campo de luz azul (WebGL), campo de churn (canvas), faixa, primitivas
+    chrome/     preloader, cursor, navegação, trilho de índice, grão, modo, modo apresentação
+    fx/         campo de luz azul (WebGL), faixa, primitivas
     viz/        rosca, ranking, tendência, moldura de gráfico
     app/        moldura das telas, selo, estados vazios
-  sections/     as seções da home, na ordem em que aparecem
+  sections/     pitch/ (os cinco blocos da home) e o rodapé
   routes/       landing, entrar, painel, reuniões, clientes, planos, importações
-  styles/       tokens · base · app (home) · painel (aplicativo)
+  styles/       tokens · base · app (chrome e rodapé) · painel (aplicativo) · pitch (home)
 ```
 
-## O scroll em camadas
+## A página do pitch
 
-| Seção | O que acontece |
+A home segue o roteiro da apresentação final: cinco blocos de tela cheia, cada um
+correspondendo a um trecho da fala. A ordem, o tempo, quem fala e quantos itens cada
+bloco revela ficam em [`src/lib/roteiro.ts`](src/lib/roteiro.ts).
+
+| Bloco | Tempo | Na tela |
+|---|---|---|
+| 01 · O problema | 0:00–0:40 | Herói com a tese; três trechos de transcrição (reclamação, oportunidade, churn) acendem um a um; o último passo liga a reclamação ao churn da mesma conta |
+| 02 · Por que vale dinheiro | 0:40–1:15 | "5–25×" e "~30%" com a fonte embaixo, depois a conclusão |
+| 03 · O que construímos | 1:15–2:30 | As quatro etapas do motor (ingestão → extração → classificação → agregação) acendem quando citadas; por fim a API, o volume processado e a stack |
+| 04 · Três níveis | 2:30–3:20 | Reunião → conta → carteira, a frase do diferencial e as áreas que usam |
+| 05 · Impacto financeiro | 3:20–4:00 | Três ganhos com a premissa embaixo, o total e o botão "Abrir painel" |
+
+### Apresentando
+
+O passador de slides funciona como num deck: ele envia setas ou Page Up/Down, e cada
+clique revela o próximo item do bloco antes de passar ao seguinte.
+
+| Tecla | Ação |
 |---|---|
-| Herói | Shader de luz azul em WebGL, órbitas SVG, título dividido em linhas, cinco camadas com parallax de ponteiro; o scroll empurra a câmera para dentro |
-| Léxico | Duas faixas infinitas cuja velocidade e inclinação vêm da velocidade do scroll |
-| A escuta | Seção presa: a transcrição avança fala por fala, os trechos acendem e cada insight entra quando a frase que o originou é dita |
-| As camadas | Quatro cartões empilhados com `position: sticky`; o GSAP só cuida do recuo (escala e brilho) de quem fica embaixo |
-| A plataforma | Galeria horizontal presa, com contra-movimento interno entre texto, desenho e numeral |
-| O risco | 1.126 partículas em canvas saem da nuvem e se agrupam em três colunas de risco conforme o scroll |
-| A escala | Contadores e gráficos que se desenham ao entrar |
-| O painel | Uma lâmina de papel abre por `clip-path` e a página troca de material — do escuro para o claro, definitivamente |
+| → ↓ espaço Page Down | Avança um item (ou vai para o próximo bloco) |
+| ← ↑ Page Up | Volta um item |
+| 1 a 5 | Pula para o bloco, do começo |
+| Home | Volta ao início |
+| P | Painel do apresentador: quem fala, janela de tempo e cronômetro do ensaio |
+| F | Tela cheia |
+
+Rolando com o mouse, a página funciona como uma landing comum: cada bloco chega
+completo. Durante a apresentação pelo teclado, a navegação do topo fica escondida e
+volta ao primeiro clique ou rolagem.
 
 ### Movimento reduzido
 
 `prefers-reduced-motion: reduce` é tratado como requisito, não como enfeite: o
-preloader some, o shader desenha um quadro e congela, nada fica preso, a galeria
-horizontal vira uma pilha vertical e todo conteúdo nasce no estado final. Ninguém
-recebe texto invisível esperando um gatilho que não vai disparar.
+preloader some, o shader desenha um quadro e congela e os itens do pitch aparecem
+sem transição. Rolando a página, todo bloco chega completo — ninguém recebe texto
+invisível esperando um gatilho que não vai disparar.
 
 ## Notas de implementação
 

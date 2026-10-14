@@ -1,8 +1,8 @@
 /* ============================================================================
    Fecho.
 
-   Tipo em escala máxima, uma cortina que sobe revelando o rodapé por baixo, e
-   o gesto de copiar o e-mail — o único momento do site em que a interface
+   Tipo em escala máxima, a faixa que corre com o scroll e o gesto de copiar
+   o e-mail — o único momento do site em que a interface
    responde com uma palavra em vez de um movimento.
    ========================================================================== */
 
@@ -39,19 +39,10 @@ const COLUNAS = [
 export function Rodape() {
   const [copiado, setCopiado] = useState(false);
 
-  const raiz = useAnimacao<HTMLElement>(({ escopo, reduzido }) => {
+  /* O corpo não tem parallax próprio: deslocado para cima, o título passava
+     por cima da faixa e as duas linhas de texto se sobrepunham. */
+  const raiz = useAnimacao<HTMLElement>(({ reduzido }) => {
     if (reduzido) return;
-
-    gsap.from('.rodape-corpo', {
-      yPercent: -28,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: escopo,
-        start: 'top bottom',
-        end: 'bottom bottom',
-        scrub: 0.8,
-      },
-    });
 
     gsap.fromTo(
       '.rodape-assinatura-texto',
