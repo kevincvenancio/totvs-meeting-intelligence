@@ -2,8 +2,8 @@
 
    A área de soltar arquivo é o único componente do sistema que aceita algo
    de fora, então ela valida antes de mandar: extensão e tamanho, com a mesma
-   regra do back-end (.csv, 50 MB). Assim o erro chega em milissegundos em vez
-   de depois do upload. */
+   regra do back-end (.csv, .txt ou .docx, 50 MB). Assim o erro chega em
+   milissegundos em vez de depois do upload. */
 
 import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { dth, n } from '../lib/format';
 import { Erro, Esqueleto, Tela, Vazio } from '../components/app/Shell';
 
 const LIMITE_BYTES = 50 * 1024 * 1024;
+const EXTENSOES = ['.csv', '.txt', '.docx'];
 
 export function Importacoes() {
   const [sobre, setSobre] = useState(false);
@@ -31,8 +32,13 @@ export function Importacoes() {
     setRecusa(null);
     if (!arquivo) return;
 
-    if (!arquivo.name.toLowerCase().endsWith('.csv')) {
-      setRecusa('O arquivo precisa ter extensão .csv.');
+    const nome = arquivo.name.toLowerCase();
+    if (nome.endsWith('.doc')) {
+      setRecusa('Arquivos .doc (Word 97-2003) não são suportados — salve como .docx.');
+      return;
+    }
+    if (!EXTENSOES.some((extensao) => nome.endsWith(extensao))) {
+      setRecusa('O arquivo precisa ter extensão .csv, .txt ou .docx.');
       return;
     }
     if (arquivo.size === 0) {
@@ -51,7 +57,7 @@ export function Importacoes() {
     <Tela
       chapeu="Entrada de dados"
       titulo="Importações"
-      descricao="Envie o CSV de transcrições. O lote registra brutos, válidos, incompletos, duplicados e erros."
+      descricao="Envie o CSV de transcrições, ou um .txt/.docx com a transcrição de uma reunião. O lote registra brutos, válidos, incompletos, duplicados e erros."
     >
       <div
         className="soltar"
@@ -71,7 +77,7 @@ export function Importacoes() {
         <input
           ref={entrada}
           type="file"
-          accept=".csv,text/csv"
+          accept=".csv,text/csv,.txt,text/plain,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           className="sr-only"
           onChange={(evento) => validarEEnviar(evento.target.files?.[0])}
         />
@@ -84,11 +90,11 @@ export function Importacoes() {
         </span>
 
         <p className="soltar-titulo">
-          {enviar.isPending ? 'Processando o lote…' : 'Arraste o CSV até aqui'}
+          {enviar.isPending ? 'Processando o lote…' : 'Arraste o CSV, .txt ou .docx até aqui'}
         </p>
         <p className="soltar-apoio">
-          Máximo 50 MB · extensão <code>.csv</code> · duplicidade detectada dentro do lote e contra
-          os anteriores
+          Máximo 50 MB · <code>.csv</code> com várias reuniões ou <code>.txt</code>/<code>.docx</code>{' '}
+          com uma transcrição · duplicidade detectada dentro do lote e contra os anteriores
         </p>
 
         <button
@@ -145,7 +151,7 @@ export function Importacoes() {
       {lotes.error && <Erro mensagem={(lotes.error as Error).message} />}
 
       {lotes.data && lotes.data.length === 0 && (
-        <Vazio titulo="Nenhum lote ainda" texto="Envie o primeiro CSV de transcrições acima." />
+        <Vazio titulo="Nenhum lote ainda" texto="Envie o primeiro arquivo de transcrições acima." />
       )}
 
       {lotes.data && lotes.data.length > 0 && (

@@ -377,7 +377,7 @@ Depois de mudar uma regra, as reuniões já gravadas podem ser reprocessadas com
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| POST | `/api/v1/importacoes` | Upload do CSV de transcrições (`multipart/form-data`, campo `arquivo`) |
+| POST | `/api/v1/importacoes` | Upload do CSV de transcrições, ou de um `.txt`/`.docx` com uma transcrição (`multipart/form-data`, campo `arquivo`) |
 | GET | `/api/v1/importacoes` | Lotes já importados |
 | GET | `/api/v1/importacoes/{id}` | Lote por id |
 | GET | `/api/v1/importacoes/{id}/reunioes` | Reuniões de um lote |
@@ -404,7 +404,32 @@ curl "http://localhost:8080/api/v1/reunioes?riscoChurn=ALTO&ordenarPor=scoreCome
 
 # Importação de CSV
 curl -X POST http://localhost:8080/api/v1/importacoes -F "arquivo=@transcricoes.csv"
+
+# Importação de uma transcrição avulsa (.txt ou .docx)
+curl -X POST http://localhost:8080/api/v1/importacoes -F "arquivo=@reuniao-alfa.docx"
 ```
+
+### Transcrições avulsas (.txt e .docx)
+
+Cada arquivo `.txt` ou `.docx` vira **uma** reunião, analisada pelo mesmo caminho das linhas do
+CSV. O documento pode começar com um cabeçalho opcional entre linhas `---`:
+
+```text
+---
+Cliente: Construtora Alfa
+Data: 2025-03-10
+Vendedor: T12345
+Duração: 45min
+---
+Vendedor: Bom dia, tudo bem?
+Cliente: Tudo, obrigado...
+```
+
+Chaves aceitas: `ID`, `Cliente`, `Data`, `Vendedor`, `Duração`, `Formato`, `Status`, `UF`, `Segmento`,
+`CNAE`, `Faturamento` e `NPS`. Sem cabeçalho, o cliente vem do nome do arquivo e a data, se houver
+uma no nome (`acme_2025-03-10.txt` ou `acme 10-03-2025.docx`). Sem `ID`, o identificador é derivado do
+texto (`ARQ-…`), então reenviar a mesma transcrição é marcado como duplicada. Arquivos `.doc`
+(Word 97-2003) não são aceitos — salve como `.docx`.
 
 ## Validações e regras de negócio
 
@@ -415,7 +440,7 @@ curl -X POST http://localhost:8080/api/v1/importacoes -F "arquivo=@transcricoes.
 | Reunião | data e cliente obrigatórios; transcrição com no mínimo 20 caracteres; identificador externo único; exclusão remove insights, feedback, comentários e planos |
 | Plano de ação | título de 5 a 120 caracteres; reunião duplicada não aceita plano; responsável precisa estar ativo; prazo não pode ser retroativo; transições seguem o ciclo de vida; conclusão e cancelamento exigem o resultado; plano finalizado não pode ser editado |
 | Comentário | texto de 3 a 2000 caracteres; edição e exclusão apenas pelo autor, gestor ou administrador; a autoria original é preservada e o comentário é marcado como editado |
-| Importação | arquivo obrigatório, não vazio e com extensão `.csv`; limite de 50 MB; duplicidade detectada dentro do lote e entre lotes |
+| Importação | arquivo obrigatório, não vazio e com extensão `.csv`, `.txt` ou `.docx`; limite de 50 MB; duplicidade detectada dentro do lote e entre lotes |
 
 ## Tratamento de exceções
 
@@ -461,6 +486,7 @@ java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ImportacaoLoteServiceTest
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ValorFinanceiroTest
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ChurnServiceTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.TranscricaoArquivoServiceTest
 ```
 
 `ValorFinanceiroTest` e `ChurnServiceTest` cobrem as regras de budget e de churn com trechos

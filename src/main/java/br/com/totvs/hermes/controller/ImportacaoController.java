@@ -26,12 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * Importação de transcrições em CSV e consulta dos lotes já processados.
+ * Importação de transcrições (CSV, .txt ou .docx) e consulta dos lotes já processados.
  */
 @RestController
 @RequestMapping("/api/v1/importacoes")
 @RequiredArgsConstructor
-@Tag(name = "Importações", description = "Upload de CSV de transcrições e histórico de lotes")
+@Tag(name = "Importações", description = "Upload de transcrições (CSV, .txt, .docx) e histórico de lotes")
 public class ImportacaoController {
 
     private final ImportacaoArquivoService importacaoArquivoService;
@@ -39,7 +39,7 @@ public class ImportacaoController {
     private final ReuniaoService reuniaoService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Importa um CSV de transcrições, analisando cada reunião encontrada")
+    @Operation(summary = "Importa um CSV de transcrições ou um documento .txt/.docx com uma transcrição, analisando cada reunião encontrada")
     public ResponseEntity<ResultadoImportacaoResposta> importar(
             @RequestParam("arquivo") MultipartFile arquivo) {
 

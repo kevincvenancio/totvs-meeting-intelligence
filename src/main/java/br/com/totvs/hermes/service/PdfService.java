@@ -813,7 +813,7 @@ public class PdfService {
         secTitulo(doc, "Identificacao do Lote");
         PdfPTable tl = tbl(2);
         row(tl, "Codigo do Lote",   lote.getCodigoLote());
-        row(tl, "Arquivo CSV",      lote.getNomeArquivoOriginal());
+        row(tl, "Arquivo",          lote.getNomeArquivoOriginal());
         row(tl, "Importado em",     lote.getDataHoraImportacao().format(FMT_DH));
         row(tl, "Status",           lote.getStatusProcessamento());
         row(tl, "Registros brutos", "" + lote.getTotalRegistrosBrutos());

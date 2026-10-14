@@ -11,10 +11,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.List;
 
 /**
- * Recebe o CSV enviado pelo Front-End e delega o processamento ao
- * {@link CsvService}, que já é usado pela CLI.
+ * Recebe o arquivo enviado pelo Front-End e delega o processamento conforme a
+ * extensão: CSV de transcrições vai para o {@link CsvService} (o mesmo da CLI);
+ * documentos .txt e .docx, com a transcrição de uma reunião, vão para o
+ * {@link TranscricaoArquivoService}.
  * <p>
  * O arquivo é gravado em um diretório temporário porque o processamento trabalha
  * com {@link File}; ao final, o temporário é sempre apagado.
@@ -24,17 +27,19 @@ import java.util.Comparator;
 @Slf4j
 public class ImportacaoArquivoService {
 
-    private static final String EXTENSAO_ESPERADA = ".csv";
+    private static final String EXTENSAO_CSV = ".csv";
+    private static final List<String> EXTENSOES_ACEITAS = List.of(EXTENSAO_CSV, ".txt", ".docx");
     private static final String PREFIXO_TEMPORARIO = "hermes-importacao-";
 
     private final CsvService csvService;
+    private final TranscricaoArquivoService transcricaoArquivoService;
 
     /**
-     * Importa um CSV de transcrições enviado por upload.
+     * Importa um CSV de transcrições ou um documento (.txt/.docx) com uma transcrição.
      *
      * @param arquivoEnviado arquivo multipart recebido do Front-End
      * @return resumo da importação, com o lote criado e os totais processados
-     * @throws ArquivoInvalidoException quando o arquivo está vazio, não é CSV ou não pôde ser lido
+     * @throws ArquivoInvalidoException quando o arquivo está vazio, tem extensão não suportada ou não pôde ser lido
      */
     public ResultadoImportacao importar(MultipartFile arquivoEnviado) {
         validar(arquivoEnviado);
@@ -42,7 +47,10 @@ public class ImportacaoArquivoService {
         try {
             diretorioTemporario = Files.createTempDirectory(PREFIXO_TEMPORARIO);
             Path arquivo = gravarTemporario(arquivoEnviado, diretorioTemporario);
-            ResultadoImportacao resultado = csvService.processar(arquivo.toFile());
+            boolean csv = arquivo.getFileName().toString().toLowerCase().endsWith(EXTENSAO_CSV);
+            ResultadoImportacao resultado = csv
+                    ? csvService.processar(arquivo.toFile())
+                    : transcricaoArquivoService.processar(arquivo.toFile());
             log.info("Importacao via API concluida: {} valida(s), {} duplicada(s), {} erro(s)",
                     resultado.processadas(), resultado.duplicadas(), resultado.erros());
             return resultado;
@@ -56,11 +64,15 @@ public class ImportacaoArquivoService {
 
     private void validar(MultipartFile arquivo) {
         if (arquivo == null || arquivo.isEmpty()) {
-            throw new ArquivoInvalidoException("Envie um arquivo CSV não vazio no campo 'arquivo'.");
+            throw new ArquivoInvalidoException("Envie um arquivo não vazio no campo 'arquivo'.");
         }
-        String nome = arquivo.getOriginalFilename();
-        if (nome == null || !nome.toLowerCase().endsWith(EXTENSAO_ESPERADA)) {
-            throw new ArquivoInvalidoException("O arquivo enviado precisa ter a extensão .csv.");
+        String nome = arquivo.getOriginalFilename() == null ? "" : arquivo.getOriginalFilename().toLowerCase();
+        if (nome.endsWith(".doc")) {
+            throw new ArquivoInvalidoException(
+                    "Arquivos .doc (Word 97-2003) não são suportados. Salve o documento como .docx.");
+        }
+        if (EXTENSOES_ACEITAS.stream().noneMatch(nome::endsWith)) {
+            throw new ArquivoInvalidoException("O arquivo enviado precisa ter a extensão .csv, .txt ou .docx.");
         }
     }
 
@@ -77,7 +89,7 @@ public class ImportacaoArquivoService {
     /** Descarta qualquer caminho embutido no nome enviado pelo cliente. */
     private String nomeSeguro(String nomeOriginal) {
         String nome = nomeOriginal == null ? "" : nomeOriginal.replaceAll("[\\\\/:*?\"<>|]", "_").trim();
-        return nome.isBlank() ? "importacao" + EXTENSAO_ESPERADA : nome;
+        return nome.isBlank() ? "importacao" + EXTENSAO_CSV : nome;
     }
 
     /** Remove o diretório temporário e o arquivo gravado dentro dele. */
