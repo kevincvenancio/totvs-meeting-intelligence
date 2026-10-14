@@ -15,10 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChurnService {
 
+    /**
+     * Expressões sobre o contrato com o fornecedor. Palavras soltas como "cancelamento",
+     * "rescisão" ou "não quero mais" aparecem o tempo todo em demonstrações (cálculo de
+     * rescisão na folha, cancelamento de nota fiscal) e marcavam churn falso.
+     */
     static final String[] CHURN_ALTO = {
-            "cancelar contrato", "não renovar", "vamos sair", "cancelamento",
-            "rescisão", "trocar de fornecedor", "sair da totvs",
-            "migrar para outro", "não quero mais", "fim do contrato"
+            "cancelar o contrato", "cancelar contrato", "cancelar nosso contrato",
+            "cancelamento do contrato", "pedido de cancelamento", "rescindir o contrato",
+            "encerrar o contrato", "rescisão do contrato com",
+            "não vamos renovar", "não renovar o contrato", "não vou renovar",
+            "sair da totvs", "trocar de fornecedor",
+            "migrar para outro fornecedor", "migrar para outro sistema", "migrar para outro erp"
     };
     static final String[] CHURN_MEDIO = {
             "avaliando outra solução", "insatisfeito com", "não está atendendo",
