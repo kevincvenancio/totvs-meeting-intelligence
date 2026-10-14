@@ -11,10 +11,11 @@ import { Logotipo } from '../brand/Logo';
 import { AlternadorDeModo } from './ModeToggle';
 
 const SECOES = [
-  { rotulo: 'Método', alvo: '#escuta' },
-  { rotulo: 'Plataforma', alvo: '#pilares' },
-  { rotulo: 'Sinais', alvo: '#risco' },
-  { rotulo: 'Números', alvo: '#numeros' },
+  { rotulo: 'Problema', alvo: '#problema' },
+  { rotulo: 'Valor', alvo: '#valor' },
+  { rotulo: 'Pipeline', alvo: '#pipeline' },
+  { rotulo: 'Níveis', alvo: '#niveis' },
+  { rotulo: 'Impacto', alvo: '#impacto' },
 ];
 
 export function Navegacao() {
@@ -58,7 +59,7 @@ export function Navegacao() {
 
   function navegarPara(alvo: string) {
     setAberto(false);
-    irPara(alvo, -40);
+    irPara(alvo);
   }
 
   return (

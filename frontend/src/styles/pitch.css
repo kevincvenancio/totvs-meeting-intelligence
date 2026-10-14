@@ -1,0 +1,962 @@
+/* ============================================================================
+   Hermes — folha do pitch (página inicial).
+   Ordem: estrutura · revelação · blocos 1 a 5 · painel do apresentador ·
+   pontos de quebra.
+
+   Cada bloco precisa caber inteiro numa tela de projetor (1280×720 até
+   1920×1080, com ou sem zoom de 125%): nada rola por dentro, e as medidas
+   descem também com a altura, não só com a largura.
+   ========================================================================== */
+
+/* ── Estrutura ──────────────────────────────────────────────────────────── */
+
+.pitch-bloco {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: 100svh;
+  padding-block: clamp(84px, 11vh, 128px) clamp(40px, 7vh, 88px);
+  background: var(--surface-0);
+  color: var(--text-primary);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pitch-bloco + .pitch-bloco {
+  border-top: 1px solid var(--hairline-soft);
+}
+
+.pitch-interior {
+  width: min(100% - clamp(28px, 6vw, 128px), 1440px);
+  margin-inline: auto;
+}
+
+.pitch-cabecalho {
+  display: grid;
+  gap: clamp(10px, 1.6vh, 18px);
+  max-width: 62rem;
+}
+
+.pitch-titulo {
+  font-size: min(clamp(2.1rem, 1.2rem + 3vw, 4.4rem), 9vh);
+}
+
+.pitch-apoio {
+  max-width: 54ch;
+}
+
+/* ── Revelação por passo ────────────────────────────────────────────────── */
+
+.revela {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(6px);
+  transition:
+    opacity 0.8s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo),
+    filter 0.8s var(--ease-out-expo);
+}
+
+.revela[data-visivel] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* ── Bloco 1 · Problema ─────────────────────────────────────────────────── */
+
+.problema {
+  background: var(--color-ink);
+}
+
+.problema-etiqueta {
+  display: flex;
+  align-items: center;
+  margin-bottom: clamp(16px, 3vh, 36px);
+  color: var(--text-secondary);
+}
+
+.problema-titulo {
+  font-size: min(clamp(2.6rem, 1rem + 4.6vw, 6.4rem), 11.5vh);
+  margin-bottom: clamp(16px, 3vh, 32px);
+}
+
+.problema-apoio {
+  max-width: 60ch;
+}
+
+.problema-apoio strong {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.problema-trechos {
+  margin-top: clamp(24px, 5vh, 60px);
+}
+
+.problema-grade {
+  display: grid;
+  gap: 14px;
+}
+
+.problema-trecho {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 12px;
+  padding: clamp(14px, 2vh, 22px) clamp(16px, 1.6vw, 22px);
+  background: color-mix(in oklab, var(--surface-1) 74%, transparent);
+  border: 1px solid var(--hairline);
+  border-top: 2px solid var(--cor-trecho);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* Apagado: o trecho existe, mas ninguém leu. */
+  opacity: 0.26;
+  filter: grayscale(1);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    filter 0.7s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo),
+    box-shadow 0.8s var(--ease-out-expo);
+}
+
+.problema-trecho[data-aceso] {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-4px);
+  box-shadow: 0 30px 80px -40px color-mix(in oklab, var(--cor-trecho) 70%, transparent);
+}
+
+.problema-trecho-topo,
+.problema-trecho-base {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.problema-trecho-tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.problema-trecho-ponto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cor-trecho);
+}
+
+.problema-trecho-fala {
+  font-family: var(--font-display);
+  font-size: min(clamp(1.1rem, 0.85rem + 0.8vw, 1.55rem), 3.4vh);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+.problema-trecho-base {
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline-soft);
+  font-size: var(--text-tiny);
+  color: var(--text-secondary);
+}
+
+.problema-elo {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+
+.problema-elo[data-visivel] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Colchete tracejado ligando o primeiro e o terceiro trecho por baixo. */
+.problema-elo-linha {
+  display: none;
+  width: calc(200% / 3 + 14px * 2 / 3);
+  height: 20px;
+  border: 1.5px dashed var(--color-state-critical);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.problema-elo-rotulo {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.problema-elo-rotulo strong {
+  font-weight: 500;
+  color: var(--color-state-critical);
+}
+
+/* ── Bloco 2 · Valor ────────────────────────────────────────────────────── */
+
+.valor {
+  background:
+    radial-gradient(60% 55% at 88% 12%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 70%),
+    var(--surface-0);
+}
+
+.valor-dados {
+  display: grid;
+  gap: clamp(28px, 5vh, 56px) clamp(32px, 5vw, 96px);
+  margin-top: clamp(28px, 6vh, 72px);
+}
+
+.valor-dado {
+  display: grid;
+  gap: clamp(10px, 1.8vh, 18px);
+  align-content: start;
+}
+
+.valor-numero {
+  font-size: min(clamp(4.2rem, 1.6rem + 8vw, 10rem), 20vh);
+  line-height: 0.9;
+  color: var(--accent-hot);
+}
+
+.valor-texto {
+  max-width: 34ch;
+  font-size: var(--text-lead);
+  line-height: 1.38;
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+.valor-fonte {
+  max-width: 54ch;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+  font-size: var(--text-tiny);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.valor-conclusao {
+  max-width: 32ch;
+  margin-top: clamp(28px, 6vh, 72px);
+  font-family: var(--font-display);
+  font-size: min(clamp(1.6rem, 1rem + 1.8vw, 2.8rem), 5.4vh);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.valor-conclusao em {
+  color: var(--accent);
+}
+
+/* ── Bloco 3 · Pipeline ─────────────────────────────────────────────────── */
+
+.pipeline-etapas {
+  display: grid;
+  gap: 14px;
+  margin-top: clamp(22px, 4.5vh, 52px);
+  counter-reset: etapa;
+}
+
+.pipeline-etapa {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.1vh, 11px);
+  padding: clamp(14px, 2.2vh, 24px) clamp(16px, 1.5vw, 22px);
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  opacity: 0.3;
+  transition:
+    opacity 0.6s var(--ease-out-expo),
+    border-color 0.6s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo),
+    box-shadow 0.7s var(--ease-out-expo);
+}
+
+.pipeline-etapa[data-acesa] {
+  opacity: 1;
+}
+
+.pipeline-etapa[data-atual] {
+  border-color: var(--accent);
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 36px 90px -44px var(--accent);
+}
+
+.etapa-topo {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.etapa-numero {
+  font-size: var(--text-tiny);
+  color: var(--accent-hot);
+}
+
+.etapa-nome {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: min(clamp(1.5rem, 1rem + 1.2vw, 2.25rem), 5vh);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.etapa-frase {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.etapa-detalhe {
+  font-size: var(--text-small);
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.etapa-exemplo {
+  display: grid;
+  gap: 2px;
+  padding: 8px 12px;
+  background: var(--surface-0);
+  border-left: 2px solid var(--color-state-critical);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.etapa-exemplo mark {
+  padding-inline: 2px;
+  background: color-mix(in oklab, var(--color-state-critical) 34%, transparent);
+  color: inherit;
+  border-radius: 2px;
+}
+
+.etapa-exemplo-sinal {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: var(--text-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-state-critical);
+}
+
+.etapa-saidas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.etapa-saidas li {
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-xs);
+}
+
+.etapa-selo {
+  align-self: flex-start;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-data-3);
+  background: color-mix(in oklab, var(--color-data-3) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-data-3) 50%, transparent);
+  border-radius: 99px;
+}
+
+.etapa-seta {
+  display: none;
+}
+
+.pipeline-base {
+  display: grid;
+  gap: 18px 40px;
+  margin-top: clamp(18px, 3.5vh, 40px);
+  padding-top: clamp(14px, 2.4vh, 24px);
+  border-top: 1px solid var(--hairline);
+}
+
+.pipeline-api {
+  display: grid;
+  gap: 4px;
+}
+
+.pipeline-rota {
+  font-size: min(clamp(1.6rem, 1rem + 1.4vw, 2.4rem), 5vh);
+  color: var(--accent-hot);
+  letter-spacing: -0.02em;
+}
+
+.pipeline-api-apoio {
+  font-size: var(--text-tiny);
+  color: var(--text-muted);
+}
+
+.pipeline-prova {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px clamp(18px, 2.4vw, 40px);
+}
+
+.pipeline-prova li {
+  display: grid;
+  gap: 2px;
+}
+
+.pipeline-prova-valor {
+  font-size: min(clamp(1.4rem, 1rem + 1vw, 2.1rem), 4.4vh);
+  letter-spacing: -0.03em;
+}
+
+.pipeline-prova-rotulo {
+  font-size: var(--text-tiny);
+  color: var(--text-secondary);
+}
+
+.pipeline-stack {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 6px;
+  max-width: 330px;
+}
+
+.pipeline-stack li {
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--text-secondary);
+  border: 1px solid var(--hairline);
+  border-radius: 99px;
+}
+
+/* ── Bloco 4 · Níveis ───────────────────────────────────────────────────── */
+
+.niveis-grade {
+  display: grid;
+  gap: 14px;
+  margin-top: clamp(22px, 4.5vh, 52px);
+}
+
+.nivel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 14px);
+  padding: clamp(16px, 2.4vh, 26px) clamp(18px, 1.6vw, 26px);
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+}
+
+.nivel-topo {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.nivel-numero {
+  font-size: var(--text-tiny);
+  color: var(--accent-hot);
+}
+
+.nivel-nome {
+  font-size: min(clamp(1.9rem, 1rem + 2vw, 3rem), 6.4vh);
+}
+
+.nivel-pergunta {
+  font-weight: 500;
+}
+
+.nivel-desenho {
+  display: grid;
+  align-content: center;
+  height: clamp(64px, 11vh, 96px);
+  padding-block: 4px;
+  color: var(--text-secondary);
+}
+
+.nivel-medidores {
+  display: grid;
+  gap: 9px;
+}
+
+.nivel-medidor {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-tiny);
+  color: var(--text-muted);
+}
+
+.nivel-medidor-trilho {
+  height: 6px;
+  background: var(--hairline);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.nivel-medidor-trilho span {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.nivel-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.nivel-ranking {
+  display: grid;
+  gap: 7px;
+}
+
+.nivel-ranking span {
+  display: block;
+  height: 9px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.nivel-itens {
+  display: grid;
+  gap: 6px;
+}
+
+.nivel-itens li {
+  position: relative;
+  padding-left: 16px;
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.nivel-itens li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.nivel-seta {
+  display: none;
+}
+
+.niveis-diferencial {
+  max-width: 44ch;
+  margin-top: clamp(20px, 4vh, 44px);
+  font-family: var(--font-display);
+  font-size: min(clamp(1.4rem, 1rem + 1.4vw, 2.3rem), 4.6vh);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.niveis-diferencial em {
+  color: var(--accent);
+}
+
+.niveis-areas {
+  display: grid;
+  gap: 12px 24px;
+  margin-top: clamp(16px, 3vh, 32px);
+  padding-top: clamp(12px, 2vh, 20px);
+  border-top: 1px solid var(--hairline);
+}
+
+.niveis-areas li {
+  display: grid;
+  gap: 2px;
+}
+
+.niveis-area-nome {
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.niveis-area-uso {
+  font-size: var(--text-tiny);
+  color: var(--text-muted);
+}
+
+/* ── Bloco 5 · Impacto ──────────────────────────────────────────────────── */
+
+.impacto-ganhos {
+  display: grid;
+  gap: clamp(20px, 4vh, 40px) clamp(24px, 3vw, 56px);
+  margin-top: clamp(24px, 5vh, 60px);
+}
+
+.impacto-ganho {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding-top: 16px;
+  border-top: 2px solid var(--cor-ganho);
+}
+
+.impacto-valor {
+  display: flex;
+  align-items: baseline;
+  gap: 0.16em;
+  font-family: var(--font-display);
+  font-size: min(clamp(3rem, 1.4rem + 4.6vw, 6.2rem), 12vh);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* O número conta em serifado, com algarismos de largura fixa. */
+.impacto-valor .numeric,
+.impacto-total-valor .numeric {
+  font-family: inherit;
+}
+
+.impacto-moeda,
+.impacto-unidade {
+  font-family: var(--font-sans);
+  font-size: 0.32em;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+}
+
+.impacto-rotulo {
+  font-weight: 500;
+}
+
+.impacto-premissa {
+  max-width: 38ch;
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.impacto-fecho {
+  display: grid;
+  gap: 24px 48px;
+  margin-top: clamp(24px, 5vh, 56px);
+  padding-top: clamp(16px, 3vh, 28px);
+  border-top: 1px solid var(--hairline);
+}
+
+.impacto-total {
+  display: grid;
+  gap: 6px;
+}
+
+.impacto-total-valor {
+  font-size: min(clamp(2.6rem, 1.4rem + 3.4vw, 5rem), 10vh);
+  line-height: 1;
+  color: var(--accent);
+}
+
+.impacto-total-apoio {
+  color: var(--text-secondary);
+}
+
+.impacto-chamada {
+  display: grid;
+  justify-items: start;
+  align-content: end;
+  gap: 18px;
+}
+
+.impacto-promessa {
+  font-family: var(--font-display);
+  font-size: min(clamp(1.4rem, 1rem + 1.2vw, 2.1rem), 4.4vh);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.impacto-promessa em {
+  color: var(--accent);
+}
+
+/* ── Painel do apresentador ─────────────────────────────────────────────── */
+
+.pitch-hud {
+  display: none;
+  position: fixed;
+  left: clamp(14px, 2.2vw, 34px);
+  bottom: clamp(12px, 2.2vh, 24px);
+  z-index: 600;
+  gap: 8px;
+  justify-items: start;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out-expo);
+}
+
+.pitch-hud[data-visivel] {
+  opacity: 1;
+}
+
+.pitch-hud-linha,
+.pitch-hud-apresentador {
+  background: var(--glass);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--hairline);
+}
+
+.pitch-hud-linha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.pitch-hud-ref {
+  color: var(--text-primary);
+}
+
+.pitch-hud-passos {
+  display: flex;
+  gap: 4px;
+}
+
+.pitch-hud-passos span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--hairline);
+  transition: background-color 0.3s;
+}
+
+.pitch-hud-passos span[data-feito] {
+  background: var(--accent);
+}
+
+.pitch-hud-apresentador {
+  display: grid;
+  gap: 3px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-tiny);
+  color: var(--text-secondary);
+}
+
+.pitch-hud-cronometro {
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.pitch-hud-cronometro[data-atrasado] {
+  color: var(--color-state-critical);
+}
+
+.pitch-hud-atalhos {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ── Pontos de quebra ───────────────────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  .niveis-areas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .pitch-hud {
+    display: grid;
+  }
+
+  .problema-grade,
+  .niveis-grade,
+  .impacto-ganhos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .problema-elo-linha {
+    display: block;
+  }
+
+  .valor-dados {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .niveis-grade {
+    gap: 40px;
+  }
+
+  .niveis-areas {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .impacto-fecho {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+  }
+
+  .impacto-chamada {
+    justify-items: end;
+    text-align: right;
+  }
+
+  /* Seta entre os cartões: ocupa o vão de 40px da grade. */
+  .nivel-seta {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: -30px;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .nivel-seta::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border: 4.5px solid transparent;
+    border-left: 7px solid var(--accent);
+    border-right: 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  .pipeline-etapas {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+  }
+
+  .etapa-seta {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: -24px;
+    width: 18px;
+    height: 1px;
+    background: var(--hairline);
+    transition: background-color 0.6s var(--ease-out-expo);
+  }
+
+  .etapa-seta::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border: 4.5px solid transparent;
+    border-left: 7px solid currentColor;
+    border-right: 0;
+    color: var(--hairline);
+    transition: color 0.6s var(--ease-out-expo);
+  }
+
+  .pipeline-etapa[data-acesa] .etapa-seta {
+    background: var(--accent);
+  }
+
+  .pipeline-etapa[data-acesa] .etapa-seta::after {
+    color: var(--accent);
+  }
+
+  .pipeline-base {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* O trilho lateral ocupa a borda direita: o conteúdo abre espaço. */
+  .pitch-interior {
+    padding-right: 84px;
+  }
+}
+
+/* Telas baixas (projetor 720p, notebook com zoom): menos ar e sem os
+   detalhes de apoio — o que a fala cobre sai antes do que a tela precisa. */
+@media (max-height: 800px) and (min-width: 900px) {
+  .pitch-bloco {
+    padding-block: 64px 58px;
+  }
+
+  .etapa-detalhe,
+  .nivel-itens li {
+    font-size: var(--text-tiny);
+  }
+
+  .pitch-apoio {
+    font-size: var(--text-body);
+  }
+
+  .etapa-saidas,
+  .pipeline-stack,
+  .nivel-pergunta {
+    display: none;
+  }
+
+  .etapa-selo {
+    margin-top: auto;
+  }
+
+  .valor-numero {
+    font-size: 16vh;
+  }
+
+  .niveis-diferencial {
+    font-size: 4vh;
+  }
+}
+
+/* No pitch o trilho mostra só o número do bloco ativo: o rótulo inteiro
+   cobriria a borda direita dos cartões. Ao passar o ponteiro, tudo volta. */
+.trilho button[data-ativo] .trilho-ref,
+.trilho button[data-ativo] .trilho-rotulo {
+  opacity: 0;
+}
+
+.trilho:hover button .trilho-ref,
+.trilho:hover button .trilho-rotulo {
+  opacity: 1;
+}
+
+/* Apresentando pelo passador, a navegação do topo some: ela reapareceria a
+   cada volta de bloco, por cima do título. Rolou ou clicou, ela volta. */
+[data-apresentando] .nav {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-out-expo);
+}
