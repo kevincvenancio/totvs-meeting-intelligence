@@ -50,15 +50,28 @@ No PowerShell, escolha uma pasta e clone:
 
 ```powershell
 cd $env:USERPROFILE\Documents
-git clone -b feature/frontend-premium https://github.com/kevincvenancio/totvs-meeting-intelligence.git
+git clone https://github.com/kevincvenancio/totvs-meeting-intelligence.git
 cd totvs-meeting-intelligence
 ```
 
-> O `-b feature/frontend-premium` pega a versão atual (Hermes, com a interface nova).
-> A branch `main` ainda está na versão anterior do projeto.
-
 Agora você está na **raiz do projeto** — é daqui que o back-end sobe.
 Para conferir, `dir` deve mostrar `pom.xml`, `mvnw.cmd`, `src` e `frontend`.
+
+### Configure o acesso ao Oracle (só na primeira vez)
+
+O usuário e a senha do Oracle **não ficam no repositório**. Crie o arquivo
+`src\main\resources\application-local.properties` com o seu RM e a senha do portal:
+
+```powershell
+@"
+ORACLE_USUARIO=rm999999
+ORACLE_SENHA=minhaSenha
+"@ | Out-File -Encoding ascii src\main\resources\application-local.properties
+```
+
+Esse arquivo é ignorado pelo Git, então a senha nunca vai parar no GitHub. Sem ele (ou sem as
+variáveis de ambiente da seção [Sobre o banco de dados](#sobre-o-banco-de-dados)), a API não
+sobe. Se não tiver acesso ao Oracle, pule esta parte e use o perfil `h2`.
 
 ---
 
@@ -182,9 +195,9 @@ Para **parar**: `Ctrl + C` em cada janela (se perguntar `Deseja encerrar (S/N)?`
 ## Sobre o banco de dados
 
 Por padrão o projeto conecta no **Oracle da FIAP** (`oracle.fiap.com.br:1521/ORCL`),
-onde já estão as 1.126 reuniões analisadas. As credenciais estão em
-`src/main/resources/application.properties` e podem ser trocadas por variáveis de
-ambiente, sem mexer no código:
+onde já estão as 1.126 reuniões analisadas. As credenciais vêm do
+`application-local.properties` do Passo 1 ou, se preferir não criar o arquivo, de
+variáveis de ambiente (que têm prioridade sobre ele):
 
 ```powershell
 $env:ORACLE_USUARIO = "rm999999"
@@ -192,8 +205,11 @@ $env:ORACLE_SENHA   = "minhaSenha"
 .\mvnw spring-boot:run
 ```
 
-> Atenção: no PowerShell é `$env:NOME = "valor"`. O `set NOME=valor` do README é
-> sintaxe do `cmd` e **não funciona** no PowerShell.
+> Atenção: no PowerShell é `$env:NOME = "valor"`. O `set NOME=valor` é sintaxe do
+> `cmd` e **não funciona** no PowerShell.
+
+> **Não precisa rodar nada para só usar o sistema:** a versão publicada está em
+> https://totvs-meeting-intelligence.vercel.app (detalhes na seção *Hospedagem* do README).
 
 ### Perfis de execução
 
@@ -240,8 +256,9 @@ taskkill /PID <numero_que_apareceu> /F
 ```
 
 **`ORA-01017: invalid username/password`**
-Usuário/senha do Oracle inválidos ou expirados. Ajuste via `$env:ORACLE_USUARIO` /
-`$env:ORACLE_SENHA`, ou use o perfil `h2`.
+Ou as credenciais do Oracle não foram configuradas (falta o `application-local.properties`
+do Passo 1), ou o usuário/senha estão errados ou expirados. Confira o arquivo, ajuste via
+`$env:ORACLE_USUARIO` / `$env:ORACLE_SENHA`, ou use o perfil `h2`.
 
 **`IO Error: The Network Adapter could not establish the connection`**
 Sem acesso ao `oracle.fiap.com.br` (internet, VPN, firewall ou rede corporativa

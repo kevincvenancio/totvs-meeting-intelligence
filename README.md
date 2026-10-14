@@ -6,6 +6,64 @@ oportunidades de venda cruzada, gera relatórios executivos em PDF e — a parti
 expõe toda a plataforma por uma **API RESTful** e permite o **acompanhamento comercial** das
 reuniões (clientes, planos de ação e comentários).
 
+## Acesse online
+
+| | Endereço |
+|---|---|
+| **Aplicação** | https://totvs-meeting-intelligence.vercel.app |
+| **API REST** | https://hermes-api-vn8l.onrender.com/api/v1 |
+| **Documentação da API (Swagger UI)** | https://hermes-api-vn8l.onrender.com/swagger-ui.html |
+
+Login de demonstração: **admin@hermes.com.br / admin123**. A navegação pelas telas não exige login.
+
+A base tem as **1.126 reuniões reais** (anonimizadas) do lote importado e, para simular um
+ambiente de produção, uma carteira de **22 clientes fictícios** com reuniões vinculadas,
+28 planos de ação e comentários de uma equipe comercial fictícia.
+
+## Hospedagem
+
+Tudo roda em planos gratuitos, com deploy automático a cada push na `main`:
+
+```
+Navegador ──▶ Vercel (front-end React)
+                 │  /api/*  (proxy, mesma origem — sem CORS)
+                 ▼
+              Render (API Spring Boot em Docker) ──▶ Oracle da FIAP
+                 ▲
+              UptimeRobot (ping a cada 5 min — mantém a API acordada)
+```
+
+| Peça | Serviço | Configuração no repositório |
+|------|---------|-----------------------------|
+| Front-end | **Vercel** (Root Directory `frontend`) | [`frontend/vercel.json`](frontend/vercel.json): encaminha `/api/*` para o Render e devolve `index.html` nas rotas do React |
+| API | **Render**, Web Service gratuito com runtime Docker (região Virginia) | [`Dockerfile`](Dockerfile) multi-stage e [`render.yaml`](render.yaml) |
+| Banco | **Oracle da FIAP** (`oracle.fiap.com.br:1521/ORCL`) | Credenciais só em variáveis de ambiente do Render (`ORACLE_USUARIO`, `ORACLE_SENHA`) |
+| Monitor | **UptimeRobot**, HTTP a cada 5 min em `/v3/api-docs` | — |
+
+Como o front chama a API por caminho relativo (`/api/v1`), o mesmo código funciona no
+`localhost` (proxy do Vite) e em produção (rewrite da Vercel).
+
+**Limites do plano gratuito, e como foram tratados:**
+
+| Limite | Tratamento |
+|--------|------------|
+| O Render desliga o serviço após 15 min sem acesso, e a API leva cerca de 1,5 min para voltar | O UptimeRobot acessa a API a cada 5 min. As 750 h/mês do plano cobrem um serviço ligado 24 h |
+| 512 MB de RAM no total | Heap fixo em 256 MB, metaspace e code cache limitados, 20 threads no Tomcat (`JAVA_TOOL_OPTIONS` e `SERVER_TOMCAT_THREADS_MAX` no Render) |
+| CPU fraca (cerca de 0,1 vCPU) | JIT só no nível 1 (`-XX:TieredStopAtLevel=1`), o que acelera a inicialização |
+| Banco no Brasil, API nos EUA | O painel lê só as colunas que agrega, sem os CLOBs; prefetch de LOB e `fetch_size` maiores no driver |
+
+## Atualizações recentes (deploy e qualidade da análise)
+
+| Entrega | Descrição |
+|---------|-----------|
+| **Deploy em produção** | Vercel + Render + Oracle FIAP, com deploy automático pela `main` (ver [Hospedagem](#hospedagem)) |
+| **Credenciais fora do repositório** | `application.properties` não tem mais usuário e senha do Oracle; eles vêm de variáveis de ambiente ou de um `application-local.properties` ignorado pelo Git |
+| **Painel mais leve** | Os indicadores saem de uma projeção sem CLOBs, e só as 10 reuniões dos rankings são carregadas inteiras: de ~40 s para ~4 s em produção e de ~400 MB para ~260 MB de memória |
+| **Regra de budget** | Um número só conta como orçamento com "R$", com "reais" depois ou com uma palavra financeira antes. "3 mil colaboradores" deixou de virar "Valor financeiro mencionado", e "3 milhões" não é mais truncado em "3 mil" |
+| **Regra de churn** | O risco alto exige uma expressão sobre o contrato ("cancelamento do contrato", "não vamos renovar", "trocar de fornecedor"). Palavras soltas como "rescisão" e "cancelamento" marcavam churn em demonstrações da folha de pagamento |
+| **Acentuação das transcrições** | As transcrições e os trechos de insight tinham sido gravados com a codificação trocada ("gestÃ£o"); foram corrigidos na base, e a base foi reanalisada com as regras novas |
+| **Correções** | Os cards de cliente mostram o total de reuniões; "Ver reuniões" filtra pelo cliente; mudar o status de um plano pela tela voltou a funcionar; reanalisar uma reunião não falha mais com `ORA-00001` |
+
 ## Novidades da versão 3.0
 
 | Entrega | Descrição |
@@ -37,6 +95,9 @@ trocar por `mvn` que o resultado é o mesmo.
 ## Como executar
 
 ### API REST + Oracle (padrão)
+
+Antes da primeira execução, configure usuário e senha do Oracle (ver
+[Conexão com o Oracle](#conexão-com-o-oracle)).
 
 ```bash
 ./mvnw clean package -DskipTests
@@ -89,34 +150,41 @@ http://localhost:8080/h2-console (JDBC `jdbc:h2:file:./data/hermes`, usuário `s
 
 ### Conexão com o Oracle
 
-A conexão padrão fica em `application.properties` e aceita sobrescrita por variáveis de ambiente,
-sem recompilar:
+O endereço do banco fica em `application.properties`, mas **usuário e senha não estão no
+repositório**. Informe-os de um destes dois jeitos:
+
+1. **Arquivo local (recomendado para desenvolvimento).** Crie
+   `src/main/resources/application-local.properties`. Ele já está no `.gitignore` e é
+   carregado automaticamente:
+
+   ```properties
+   ORACLE_USUARIO=rm999999
+   ORACLE_SENHA=minhaSenha
+   ```
+
+2. **Variáveis de ambiente**, que têm prioridade sobre o arquivo (é assim que o Render recebe as credenciais):
+
+   ```powershell
+   $env:ORACLE_USUARIO = "rm999999"
+   $env:ORACLE_SENHA   = "minhaSenha"
+   .\mvnw spring-boot:run
+   ```
 
 | Variável | Padrão |
 |----------|--------|
 | `ORACLE_HOST` | `oracle.fiap.com.br` |
 | `ORACLE_PORTA` | `1521` |
 | `ORACLE_SID` | `ORCL` |
-| `ORACLE_USUARIO` | RM do aluno |
-| `ORACLE_SENHA` | senha do portal |
+| `ORACLE_USUARIO` | — (obrigatória) |
+| `ORACLE_SENHA` | — (obrigatória) |
 
-```bash
-# exemplo com credenciais fora do código-fonte (cmd do Windows)
-set ORACLE_USUARIO=rm999999
-set ORACLE_SENHA=minhaSenha
-mvnw spring-boot:run
-```
-
-```powershell
-# o mesmo no PowerShell
-$env:ORACLE_USUARIO = "rm999999"
-$env:ORACLE_SENHA   = "minhaSenha"
-.\mvnw spring-boot:run
-```
+Sem as credenciais, a aplicação não sobe no perfil padrão. Para trabalhar sem o Oracle, use o
+perfil `h2`.
 
 O driver é o `com.oracle.database.jdbc:ojdbc11` e o dialeto é detectado automaticamente pelo
 Hibernate a partir da conexão. O pool (HikariCP) está limitado a 5 conexões porque o ambiente
-acadêmico restringe sessões simultâneas por usuário.
+acadêmico restringe sessões simultâneas por usuário. O driver traz até 256 KB de cada CLOB junto
+com a linha (`oracle.jdbc.defaultLobPrefetchSize`), em vez de uma ida ao banco por coluna.
 
 ### Schema
 
@@ -214,6 +282,25 @@ PENDENTE ──▶ EM_ANDAMENTO ──▶ CONCLUIDO
 
 As transições válidas são declaradas no próprio enum `StatusPlanoAcao`, e a resposta da API
 devolve em `transicoesPermitidas` os status alcançáveis — o Front-End só habilita o que é válido.
+
+## Motor de análise
+
+A análise é feita por heurísticas sobre o texto da transcrição (`AnaliseTranscricaoService`,
+`ChurnService`, `FeedbackReuniaoService`), sem modelo de linguagem. Cada insight guarda o trecho
+da transcrição que o originou, e esse trecho aparece no detalhe da reunião.
+
+| Sinal | Regra |
+|-------|-------|
+| **Budget** | Primeiro valor em dinheiro citado: exige "R$", "reais" logo depois ou uma palavra financeira logo antes (valor, custo, orçamento, mensalidade, preço…). Soma +15 no score de qualidade e +20 no comercial |
+| **Churn alto** | Expressões sobre o contrato com o fornecedor: "cancelamento do contrato", "cancelar o contrato", "não vamos renovar", "trocar de fornecedor", "sair da totvs"… |
+| **Churn médio** | Insatisfação ou avaliação de alternativas ("não está atendendo", "insatisfeito com", "proposta do concorrente"…) ou concorrente citado |
+
+> **Limitação conhecida:** por ser baseada em palavras-chave, a regra de churn não sabe de quem
+> é o contrato. Um prospect dizendo que vai cancelar o contrato com o fornecedor *atual* para vir
+> para a TOTVS também aparece como churn alto.
+
+Depois de mudar uma regra, as reuniões já gravadas podem ser reprocessadas com
+`POST /api/v1/reunioes/{id}/analise`.
 
 ## Endpoints
 
@@ -372,7 +459,12 @@ java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.util.TextoUtilsTest
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.DuplicidadeServiceTest
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ImportacaoLoteServiceTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ValorFinanceiroTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ChurnServiceTest
 ```
+
+`ValorFinanceiroTest` e `ChurnServiceTest` cobrem as regras de budget e de churn com trechos
+reais que antes geravam falso positivo ("3 mil colaboradores", "cálculo de rescisão").
 
 ## Configuração
 
@@ -380,16 +472,34 @@ Principais propriedades em `src/main/resources/application.properties`:
 
 | Propriedade | Padrão | Uso |
 |-------------|--------|-----|
-| `server.port` | `8080` | Porta da API |
+| `server.port` | `${PORT:8080}` | Porta da API (o Render informa a sua em `PORT`) |
 | `spring.datasource.url` | `jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL` | Conexão Oracle (ver variáveis de ambiente acima) |
 | `spring.datasource.hikari.maximum-pool-size` | `5` | Limite de conexões simultâneas |
-| `hermes.cors.origens` | `localhost:3000, 4200, 5173, 127.0.0.1:5500` | Origens liberadas para o Front-End |
+| `spring.jpa.properties.hibernate.jdbc.fetch_size` | `100` | Linhas por ida ao banco nas consultas |
+| `hermes.cors.origens` | `localhost:3000, 4200, 5173, 127.0.0.1:5500` | Origens liberadas para o Front-End (sobrescreva com `HERMES_CORS_ORIGENS`) |
 | `hermes.relatorios.diretorio` | `./relatorios` | Pasta onde os PDFs são gerados |
 | `spring.servlet.multipart.max-file-size` | `50MB` | Tamanho máximo do CSV importado |
 | `spring.jpa.hibernate.ddl-auto` | `update` | Criação/atualização automática do schema |
 
-> As credenciais da FIAP estão no `application.properties` para facilitar a execução e a correção
-> do trabalho. Se o repositório for tornado público, remova os valores padrão e passe usuário e
-> senha apenas pelas variáveis de ambiente `ORACLE_USUARIO` / `ORACLE_SENHA`.
-> 
-> Integrantes do Grupo:   Nicolas Barnabe da Cruz – RM: 561997   Luiz Antônio Moraes Santos – RM: 562142   Kevin Carvalho Venâncio - RM: 561459   Guilherme de Melo Sorrilha – RM: 563825   Yan Breno Barutti Conceição - RM: 566412 
+## Limitações conhecidas
+
+- **A API não tem autenticação por token.** O login valida a senha, mas os demais endpoints são
+  abertos; com a API publicada, qualquer pessoa com a URL consegue ler e alterar dados.
+- **Os PDFs executivo e de lote levam de 40 a 50 s em produção**, porque leem todas as reuniões
+  com seus textos. O PDF de uma reunião sai em cerca de 3 s.
+- **O feedback educativo é gerado sem acentos** ("orcamento", "decisao") pelos modelos de texto
+  do `FeedbackReuniaoService`.
+- **A detecção de codificação do CSV é frágil.** O importador (`CsvService.lerArquivo`) tenta
+  UTF-8 e, se encontrar um único byte inválido em qualquer ponto do arquivo, relê o arquivo
+  inteiro como ISO-8859-1, trocando todos os acentos. Essa é a causa provável dos textos
+  corrigidos na base atual. Importe CSVs salvos em UTF-8 válido.
+
+## Integrantes do grupo
+
+| Nome | RM |
+|------|----|
+| Nicolas Barnabe da Cruz | 561997 |
+| Luiz Antônio Moraes Santos | 562142 |
+| Kevin Carvalho Venâncio | 561459 |
+| Guilherme de Melo Sorrilha | 563825 |
+| Yan Breno Barutti Conceição | 566412 |
