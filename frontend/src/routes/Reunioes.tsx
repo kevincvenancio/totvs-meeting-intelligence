@@ -236,7 +236,7 @@ export function Reunioes() {
                       )}
                     </td>
                     <td className="numeric alinha-direita">
-                      <Medidor valor={reuniao.scoreComercial ?? 0} cor="var(--color-data-2)" />
+                      <Medidor valor={reuniao.scoreComercial ?? 0} cor="var(--color-data-1)" />
                     </td>
                     <td className="numeric alinha-direita">
                       <Medidor valor={reuniao.scoreQualidade ?? 0} cor="var(--color-data-3)" />

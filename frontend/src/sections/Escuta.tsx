@@ -35,17 +35,17 @@ const ENTRADA_CARTAO = INSIGHTS_VITRINE.map(
 );
 
 const COR_MARCA: Record<string, string> = {
-  dor: 'var(--color-data-1)',
+  dor: 'var(--color-data-2)',
   risco: 'var(--color-data-5)',
   churn: 'var(--color-state-critical)',
-  oportunidade: 'var(--color-data-2)',
+  oportunidade: 'var(--color-data-1)',
 };
 
 const COR_INSIGHT: Record<string, string> = {
-  DOR: 'var(--color-data-1)',
+  DOR: 'var(--color-data-2)',
   RISCO: 'var(--color-data-5)',
   CHURN: 'var(--color-state-critical)',
-  OPORTUNIDADE: 'var(--color-data-2)',
+  OPORTUNIDADE: 'var(--color-data-1)',
 };
 
 export function Escuta() {

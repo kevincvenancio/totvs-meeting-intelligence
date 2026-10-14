@@ -159,7 +159,7 @@ export function ReuniaoDetalhe() {
 
               <div className="detalhe-par">
                 {linhas(r.doresIdentificadas).length > 0 && (
-                  <Bloco titulo="Dores identificadas" tom="var(--color-data-1)">
+                  <Bloco titulo="Dores identificadas" tom="var(--color-data-2)">
                     <ul className="detalhe-lista">
                       {linhas(r.doresIdentificadas).map((dor) => (
                         <li key={dor}>{dor}</li>
@@ -168,7 +168,7 @@ export function ReuniaoDetalhe() {
                   </Bloco>
                 )}
                 {linhas(r.oportunidades).length > 0 && (
-                  <Bloco titulo="Oportunidades" tom="var(--color-data-2)">
+                  <Bloco titulo="Oportunidades" tom="var(--color-data-1)">
                     <ul className="detalhe-lista">
                       {linhas(r.oportunidades).map((op) => (
                         <li key={op}>{op}</li>

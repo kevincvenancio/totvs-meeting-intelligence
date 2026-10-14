@@ -1,6 +1,6 @@
 /* ============================================================================
    HERMES — Sistema de design
-   Descritor: "Obsidiana com brasa — analytics editorial sobre papel quente."
+   Descritor: "Obsidiana com azul TOTVS — analytics editorial sobre papel quente."
 
    Tudo o que é cor, tipo, ritmo e profundidade nasce aqui. Nenhum componente
    escreve hex literal: só consome estes tokens.
@@ -25,16 +25,16 @@
   --color-smoke: #6a707c;
   --color-dust: #444a55;
 
-  /* ── Brasa: o único acento cromático da marca ─────────────────────────── */
-  --color-ember: #d9622c;
-  --color-ember-hot: #ff7a3d;
-  --color-ember-deep: #8f3a13;
-  --color-ember-wash: #1e120c;
+  /* ── Azul TOTVS: o único acento cromático da marca ────────────────────── */
+  --color-brand: #2f7bff;
+  --color-brand-hot: #5c9bff;
+  --color-brand-deep: #0a3d9e;
+  --color-brand-wash: #0a1428;
 
   /* ── Paleta de dados (validada: dark e light, CVD + contraste) ─────────
      Ordem dos slots é o mecanismo de segurança CVD — não reordenar.       */
-  --color-data-1: #d9622c; /* brasa   */
-  --color-data-2: #3e87d8; /* azure   */
+  --color-data-1: #3e87d8; /* azure   */
+  --color-data-2: #d9622c; /* brasa   */
   --color-data-3: #2a9770; /* jade    */
   --color-data-4: #7e70dc; /* violeta */
   --color-data-5: #b58412; /* âmbar   */
@@ -92,8 +92,10 @@
   --text-secondary: var(--color-ash);
   --text-muted: var(--color-smoke);
 
-  --accent: var(--color-ember);
-  --accent-hot: var(--color-ember-hot);
+  --accent: var(--color-brand);
+  --accent-hot: var(--color-brand-hot);
+  /* Tinta sobre fundo de acento (botões, rótulos preenchidos) */
+  --on-accent: var(--color-ink);
 
   --grid-line: rgb(255 255 255 / 0.045);
   --glass: rgb(18 20 26 / 0.72);
@@ -117,11 +119,12 @@
   --text-secondary: #4a4f59;
   --text-muted: #757a84;
 
-  --accent: #c4551f;
-  --accent-hot: #d9622c;
+  --accent: #0057ff;
+  --accent-hot: #2f7bff;
+  --on-accent: #ffffff;
 
-  --color-data-1: #c4551f;
-  --color-data-2: #2b6fbf;
+  --color-data-1: #2b6fbf;
+  --color-data-2: #c4551f;
   --color-data-3: #1b7f5c;
   --color-data-4: #6355c4;
   --color-data-5: #8f6706;

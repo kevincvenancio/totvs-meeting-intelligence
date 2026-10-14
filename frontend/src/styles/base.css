@@ -68,7 +68,7 @@ input, select, textarea {
 
 ::selection {
   background: var(--accent);
-  color: var(--color-ink);
+  color: var(--on-accent);
 }
 
 /* ── Barra de rolagem discreta ─────────────────────────────────────────── */
@@ -206,7 +206,7 @@ input, select, textarea {
   z-index: 999;
   padding: 10px 18px;
   background: var(--accent);
-  color: var(--color-ink);
+  color: var(--on-accent);
   font-family: var(--font-mono);
   font-size: var(--text-tiny);
   letter-spacing: 0.1em;

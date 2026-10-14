@@ -98,10 +98,10 @@ export const rotuloCriticidade: Record<NivelCriticidade, string> = {
 
 export const corSentimento: Record<Sentimento, string> = {
   POSITIVO: 'var(--color-data-3)',
-  OPORTUNIDADE_COMERCIAL: 'var(--color-data-2)',
+  OPORTUNIDADE_COMERCIAL: 'var(--color-data-1)',
   MISTO: 'var(--color-data-5)',
   NEUTRO: 'var(--color-state-idle)',
-  NEGATIVO: 'var(--color-data-1)',
+  NEGATIVO: 'var(--color-data-2)',
   CRITICO: 'var(--color-data-6)',
 };
 
@@ -120,7 +120,7 @@ export const corCompletude: Record<StatusCompletude, string> = {
 
 export const corStatusPlano: Record<StatusPlanoAcao, string> = {
   PENDENTE: 'var(--color-state-warn)',
-  EM_ANDAMENTO: 'var(--color-data-2)',
+  EM_ANDAMENTO: 'var(--color-data-1)',
   CONCLUIDO: 'var(--color-state-good)',
   CANCELADO: 'var(--color-state-idle)',
 };
@@ -128,7 +128,7 @@ export const corStatusPlano: Record<StatusPlanoAcao, string> = {
 export const corStatusCliente: Record<StatusCliente, string> = {
   ATIVO: 'var(--color-state-good)',
   EM_RISCO: 'var(--color-state-critical)',
-  PROSPECT: 'var(--color-data-2)',
+  PROSPECT: 'var(--color-data-1)',
   INATIVO: 'var(--color-state-idle)',
 };
 

@@ -128,8 +128,8 @@
   font-size: var(--text-small);
   line-height: 1.5;
   color: var(--text-secondary);
-  background: color-mix(in oklab, var(--color-ember) 8%, var(--surface-1));
-  border: 1px solid color-mix(in oklab, var(--color-ember) 26%, transparent);
+  background: color-mix(in oklab, var(--accent) 8%, var(--surface-1));
+  border: 1px solid color-mix(in oklab, var(--accent) 26%, transparent);
   border-radius: var(--radius-md);
 }
 

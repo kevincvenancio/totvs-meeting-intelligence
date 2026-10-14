@@ -26,7 +26,7 @@ npm run preview  # serve o dist
 
 ## Identidade visual
 
-Descritor: **obsidiana com brasa — analytics editorial sobre papel quente**.
+Descritor: **obsidiana com azul TOTVS — analytics editorial sobre papel quente**.
 
 | | |
 |---|---|
@@ -35,7 +35,7 @@ Descritor: **obsidiana com brasa — analytics editorial sobre papel quente**.
 | Dados e códigos | JetBrains Mono Variable |
 | Superfícies escuras | `#08090b` · `#0e1015` · `#12141a` · `#1a1e26` |
 | Superfícies claras | `#f4f1ea` · `#eae6dc` · `#ded9cc` |
-| Acento (brasa) | `#d9622c`, quente `#ff7a3d` |
+| Acento (azul TOTVS) | `#2f7bff` no escuro, `#0057ff` no claro; realce `#5c9bff` |
 
 As fontes são auto-hospedadas via `@fontsource`: o site abre igual sem rede e sem
 CDN de terceiros. Marca, ícone e imagem de compartilhamento são SVG gerados em
@@ -49,8 +49,8 @@ contra a superfície):
 
 | Slot | Escuro | Claro |
 |---|---|---|
-| 1 brasa | `#d9622c` | `#c4551f` |
-| 2 azure | `#3e87d8` | `#2b6fbf` |
+| 1 azure | `#3e87d8` | `#2b6fbf` |
+| 2 brasa | `#d9622c` | `#c4551f` |
 | 3 jade | `#2a9770` | `#1b7f5c` |
 | 4 violeta | `#7e70dc` | `#6355c4` |
 | 5 âmbar | `#b58412` | `#8f6706` |
@@ -72,7 +72,7 @@ src/
   components/
     brand/      marca, logotipo, órbitas
     chrome/     preloader, cursor, navegação, trilho de índice, grão, modo
-    fx/         campo de brasa (WebGL), campo de churn (canvas), faixa, primitivas
+    fx/         campo de luz azul (WebGL), campo de churn (canvas), faixa, primitivas
     viz/        rosca, ranking, tendência, moldura de gráfico
     app/        moldura das telas, selo, estados vazios
   sections/     as seções da home, na ordem em que aparecem
@@ -84,7 +84,7 @@ src/
 
 | Seção | O que acontece |
 |---|---|
-| Herói | Shader de brasa em WebGL, órbitas SVG, título dividido em linhas, cinco camadas com parallax de ponteiro; o scroll empurra a câmera para dentro |
+| Herói | Shader de luz azul em WebGL, órbitas SVG, título dividido em linhas, cinco camadas com parallax de ponteiro; o scroll empurra a câmera para dentro |
 | Léxico | Duas faixas infinitas cuja velocidade e inclinação vêm da velocidade do scroll |
 | A escuta | Seção presa: a transcrição avança fala por fala, os trechos acendem e cada insight entra quando a frase que o originou é dita |
 | As camadas | Quatro cartões empilhados com `position: sticky`; o GSAP só cuida do recuo (escala e brilho) de quem fica embaixo |

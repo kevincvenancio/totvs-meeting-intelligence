@@ -49,7 +49,7 @@
 
 .botao--acento {
   --botao-fundo: var(--accent);
-  --botao-tinta: #08090b;
+  --botao-tinta: var(--on-accent);
   --botao-borda: var(--accent);
 }
 .botao--acento:hover {
@@ -166,7 +166,7 @@
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #08090b;
+  color: var(--on-accent);
   opacity: 0;
   transition: opacity 0.28s var(--ease-out-expo);
 }
@@ -197,7 +197,7 @@
 }
 
 .preloader-lamina--tras {
-  background: var(--color-ember-wash);
+  background: var(--color-brand-wash);
 }
 
 .preloader-lamina--frente {
@@ -241,7 +241,7 @@
 .preloader-barra span {
   display: block;
   height: 100%;
-  background: var(--color-ember);
+  background: var(--color-brand);
   transform-origin: left center;
   transition: transform 0.12s linear;
 }
@@ -532,7 +532,7 @@
   height: 100%;
   /* Degradê de reserva: é o que se vê se o WebGL não estiver disponível. */
   background:
-    radial-gradient(120% 90% at 68% 78%, #3a1a0d 0%, transparent 58%),
+    radial-gradient(120% 90% at 68% 78%, #0b1f45 0%, transparent 58%),
     radial-gradient(100% 80% at 20% 20%, #16171d 0%, transparent 60%),
     var(--color-ink);
 }

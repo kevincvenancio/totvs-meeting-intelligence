@@ -71,7 +71,7 @@ export function Painel() {
             />
             <ValorHeroi
               rotulo="Oportunidades"
-              tom="var(--color-data-2)"
+              tom="var(--color-data-1)"
               valor={<Contador valor={data.totalOportunidades} />}
               apoio={`score comercial médio ${data.scoreComercialMedia}`}
             />

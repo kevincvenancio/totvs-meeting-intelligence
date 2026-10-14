@@ -24,8 +24,8 @@ export function Marca({ tamanho = 28, className, vivo = false }: Props) {
     >
       <defs>
         <linearGradient id="marca-brasa" x1="14" y1="8" x2="52" y2="58" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="var(--color-ember-hot)" />
-          <stop offset="1" stopColor="var(--color-ember-deep)" />
+          <stop offset="0" stopColor="var(--color-brand-hot)" />
+          <stop offset="1" stopColor="var(--color-brand-deep)" />
         </linearGradient>
       </defs>
       <path
@@ -36,7 +36,7 @@ export function Marca({ tamanho = 28, className, vivo = false }: Props) {
         strokeLinecap="round"
       />
       <circle cx="32" cy="32" r="11" stroke="currentColor" strokeWidth="2" opacity=".45" />
-      <circle className="marca-nucleo" cx="32" cy="32" r="3.5" fill="var(--color-ember-hot)" />
+      <circle className="marca-nucleo" cx="32" cy="32" r="3.5" fill="var(--color-brand-hot)" />
     </svg>
   );
 }
@@ -59,9 +59,9 @@ export function Orbitas({ className }: { className?: string }) {
     <svg viewBox="0 0 800 800" className={className} fill="none" aria-hidden="true">
       <defs>
         <radialGradient id="orbita-luz" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0.55" stopColor="var(--color-ember)" stopOpacity="0" />
-          <stop offset="0.82" stopColor="var(--color-ember)" stopOpacity="0.5" />
-          <stop offset="1" stopColor="var(--color-ember)" stopOpacity="0" />
+          <stop offset="0.55" stopColor="var(--color-brand)" stopOpacity="0" />
+          <stop offset="0.82" stopColor="var(--color-brand)" stopOpacity="0.5" />
+          <stop offset="1" stopColor="var(--color-brand)" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -88,9 +88,9 @@ export function Orbitas({ className }: { className?: string }) {
 
       {/* Marcadores que percorrem as órbitas — os "sinais" em trânsito */}
       <g className="orbita-marcadores">
-        <circle className="sinal sinal--a" cx="400" cy="250" r="3" fill="var(--color-ember-hot)" />
+        <circle className="sinal sinal--a" cx="400" cy="250" r="3" fill="var(--color-brand-hot)" />
         <circle className="sinal sinal--b" cx="638" cy="400" r="2" fill="var(--color-data-2)" />
-        <circle className="sinal sinal--c" cx="400" cy="726" r="2.5" fill="var(--color-ember)" />
+        <circle className="sinal sinal--c" cx="400" cy="726" r="2.5" fill="var(--color-brand)" />
       </g>
 
       <circle cx="400" cy="400" r="400" fill="url(#orbita-luz)" opacity=".35" />

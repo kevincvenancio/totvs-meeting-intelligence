@@ -114,7 +114,7 @@ function DesenhoAcompanhamento() {
       {/* Ciclo de vida do plano de ação — o enum StatusPlanoAcao, desenhado */}
       {[
         { x: 8, rotulo: 'PENDENTE', cor: 'var(--color-state-warn)' },
-        { x: 116, rotulo: 'EM ANDAM.', cor: 'var(--color-data-2)' },
+        { x: 116, rotulo: 'EM ANDAM.', cor: 'var(--color-data-1)' },
         { x: 224, rotulo: 'CONCLUÍDO', cor: 'var(--color-state-good)' },
       ].map((estado) => (
         <g key={estado.rotulo}>

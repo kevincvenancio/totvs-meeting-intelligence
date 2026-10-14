@@ -78,11 +78,11 @@ void main() {
   /* O ponteiro do mouse aquece a região onde está, com queda suave */
   float calorPonteiro = 1.0 - smoothstep(0.0, 1.05, length(p - uPonteiro * 1.15));
 
-  /* Rampa da marca: obsidiana -> vinho -> brasa -> laranja quente */
+  /* Rampa da marca: obsidiana -> marinho -> azul TOTVS -> azul claro */
   vec3 obsidiana = vec3(0.031, 0.035, 0.043);
-  vec3 vinho     = vec3(0.117, 0.071, 0.047);
-  vec3 brasa     = vec3(0.851, 0.384, 0.173);
-  vec3 quente    = vec3(1.000, 0.478, 0.239);
+  vec3 vinho     = vec3(0.039, 0.067, 0.141);
+  vec3 brasa     = vec3(0.184, 0.482, 1.000);
+  vec3 quente    = vec3(0.361, 0.608, 1.000);
 
   float intensidade = clamp(f * 0.72 + 0.42, 0.0, 1.0);
   intensidade = pow(intensidade, 1.75);

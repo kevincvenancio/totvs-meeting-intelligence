@@ -29,7 +29,7 @@ const CAMADAS: Camada[] = [
     texto:
       'A transcrição vira tema, resumo, pontos principais, dores, oportunidades, produtos citados e concorrentes mencionados. Nada de interpretação ainda — só o que está escrito, organizado.',
     campo: 'resumoReuniao · pontosPrincipais · doresIdentificadas',
-    cor: 'var(--color-data-2)',
+    cor: 'var(--color-data-1)',
     exemplo: (
       <p className="camada-citacao">
         “Desde a virada de versão o time fiscal vira dois fins de semana, e a diretoria começou a
@@ -67,7 +67,7 @@ const CAMADAS: Camada[] = [
       <div className="camada-medidores">
         {[
           { r: 'Churn', v: 86, c: 'var(--color-state-critical)' },
-          { r: 'Comercial', v: 61, c: 'var(--color-data-2)' },
+          { r: 'Comercial', v: 61, c: 'var(--color-data-1)' },
           { r: 'Qualidade', v: 44, c: 'var(--color-state-warn)' },
         ].map((m) => (
           <div key={m.r} className="camada-medidor">
