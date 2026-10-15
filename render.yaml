@@ -14,3 +14,8 @@ services:
         sync: false
       - key: ORACLE_SENHA
         sync: false
+      # Hermes Chat: chaves dos provedores de IA (pelo menos uma)
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false

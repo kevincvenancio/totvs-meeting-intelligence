@@ -8,6 +8,7 @@ import { Cursor } from './components/chrome/Cursor';
 import { Grao } from './components/chrome/Grain';
 import { Preloader } from './components/chrome/Preloader';
 import { Landing } from './routes/Landing';
+import { ChatDoAplicativo } from './components/app/Shell';
 
 /* As telas do aplicativo só chegam ao navegador quando alguém entra nelas —
    a home carrega leve, que é onde a primeira impressão acontece. */
@@ -88,6 +89,8 @@ export default function App() {
             <Route path="*" element={<Landing />} />
           </Routes>
         </Suspense>
+
+        <ChatDoAplicativo />
       </BrowserRouter>
     </QueryClientProvider>
   );

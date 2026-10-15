@@ -7,6 +7,8 @@
    ========================================================================== */
 
 import type {
+  ChatRequisicao,
+  ChatResposta,
   Cliente,
   Comentario,
   Dashboard,
@@ -271,3 +273,35 @@ export const relatorios = {
   reuniao: (id: number) => `${BASE}/relatorios/reunioes/${id}`,
   lote: (id: number) => `${BASE}/relatorios/lotes/${id}`,
 };
+
+/* ── Hermes Chat ────────────────────────────────────────────────────────────
+   Não usa `bruto`: lá, 503 significa "back-end fora do ar" e liga o modo
+   vitrine no site inteiro. Aqui, 503 com corpo da API significa só "nenhum
+   provedor de IA respondeu" — a API continua viva.                           */
+
+export async function enviarMensagemChat(requisicao: ChatRequisicao): Promise<ChatResposta> {
+  let resposta: Response;
+  try {
+    resposta = await fetch(montarUrl('/chat'), {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(requisicao),
+    });
+  } catch {
+    marcar(false);
+    throw new ApiError(0, { mensagem: 'API indisponível.' });
+  }
+
+  const corpo = (await resposta.json().catch(() => null)) as ChatResposta | ErroResposta | null;
+  // Corpo padronizado da API (com `caminho`) = a aplicação respondeu, mesmo num 503.
+  const respondeuAplicacao = corpo !== null && ('resposta' in corpo || 'caminho' in corpo);
+
+  if (!respondeuAplicacao && INDISPONIVEL.has(resposta.status)) {
+    marcar(false);
+    throw new ApiError(resposta.status, { mensagem: 'API indisponível.' });
+  }
+
+  marcar(true);
+  if (!resposta.ok) throw new ApiError(resposta.status, (corpo ?? {}) as ErroResposta);
+  return corpo as ChatResposta;
+}
