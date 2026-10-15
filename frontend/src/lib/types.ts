@@ -258,3 +258,49 @@ export interface ErroResposta {
   caminho?: string;
   campos?: { campo: string; mensagem: string }[];
 }
+
+/* ── Hermes Chat ────────────────────────────────────────────────────────── */
+
+export type PapelChat = 'user' | 'assistant';
+
+/** Uma mensagem da conversa com o Hermes (só em memória, nunca persistida). */
+export interface ChatMensagem {
+  papel: PapelChat;
+  texto: string;
+}
+
+export type TipoFonteChat = 'REUNIAO' | 'CLIENTE' | 'PLANO_ACAO';
+
+export interface FonteChat {
+  tipo: TipoFonteChat;
+  id: number;
+}
+
+export type AgenteChat = 'REUNIOES' | 'SUPORTE';
+
+export interface ChatRequisicao {
+  mensagem: string;
+  historico: ChatMensagem[];
+  reuniaoId?: number | null;
+  clienteId?: number | null;
+  agente: AgenteChat;
+  /** Rota atual, ex.: /importacoes — ajuda o agente de suporte. */
+  tela?: string;
+}
+
+/** Linha de rastreio: o que foi consultado e quanto custou. */
+export interface MetaChat {
+  agente: AgenteChat;
+  reunioesConsultadas: number;
+  planosConsultados: number;
+  tokensContexto: number;
+  duracaoMs: number;
+  chamouModelo: boolean;
+}
+
+export interface ChatResposta {
+  resposta: string;
+  fontes: FonteChat[];
+  foraDoEscopo: boolean;
+  meta?: MetaChat;
+}

@@ -7,8 +7,9 @@
    ========================================================================== */
 
 import { useEffect, useState, type ReactNode } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { assinarStatusApi } from '../../lib/api';
+import { HermesChat } from '../chat/HermesChat';
 
 const ROTAS = [
   { para: '/painel', rotulo: 'Painel' },
@@ -17,6 +18,14 @@ const ROTAS = [
   { para: '/planos-acao', rotulo: 'Planos de ação' },
   { para: '/importacoes', rotulo: 'Importações' },
 ];
+
+/** Hermes Chat: montado uma vez no App para a conversa sobreviver à troca de
+    tela; só aparece nas rotas do aplicativo, nunca na landing nem no login. */
+export function ChatDoAplicativo() {
+  const { pathname } = useLocation();
+  const telaDoApp = ROTAS.some((r) => pathname === r.para || pathname.startsWith(`${r.para}/`));
+  return telaDoApp ? <HermesChat /> : null;
+}
 
 export function AvisoDeVitrine() {
   const [viva, setViva] = useState<boolean | null>(null);

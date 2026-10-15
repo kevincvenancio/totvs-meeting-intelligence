@@ -73,6 +73,26 @@ public class ManipuladorGlobalExcecoes {
         return construir(HttpStatus.INTERNAL_SERVER_ERROR, excecao.getMessage(), requisicao);
     }
 
+    // ── Hermes Chat ───────────────────────────────────────────────────
+
+    @ExceptionHandler(LimiteRequisicoesException.class)
+    public ResponseEntity<ErroResposta> tratarLimiteRequisicoes(LimiteRequisicoesException excecao,
+                                                                HttpServletRequest requisicao) {
+        return construir(HttpStatus.TOO_MANY_REQUESTS, excecao.getMessage(), requisicao);
+    }
+
+    @ExceptionHandler(HermesIndisponivelException.class)
+    public ResponseEntity<ErroResposta> tratarHermesIndisponivel(HermesIndisponivelException excecao,
+                                                                 HttpServletRequest requisicao) {
+        return construir(HttpStatus.SERVICE_UNAVAILABLE, excecao.getMessage(), requisicao);
+    }
+
+    @ExceptionHandler(PerguntaInvalidaException.class)
+    public ResponseEntity<ErroResposta> tratarPerguntaInvalida(PerguntaInvalidaException excecao,
+                                                               HttpServletRequest requisicao) {
+        return construir(HttpStatus.BAD_REQUEST, excecao.getMessage(), requisicao);
+    }
+
     // ── Validação de entrada ──────────────────────────────────────────
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

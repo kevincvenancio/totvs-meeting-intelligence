@@ -297,3 +297,39 @@ Para escolher um perfil pela IDE: `Run → Edit Configurations…` → campo
 
 > Se você já tem o Maven instalado e prefere usar o comando `mvn`, funciona igual —
 > é só trocar `.\mvnw` por `mvn` em todos os comandos deste guia.
+
+---
+
+## Hermes Chat (assistente)
+
+O botão **"Pergunte ao Hermes"** aparece no canto inferior direito das telas do aplicativo
+(painel, reuniões, clientes, planos de ação, importações), com dois agentes:
+
+- **Reuniões** — responde com os dados reais do banco (reuniões, clientes, planos de ação).
+- **Suporte técnico** — explica como usar as telas; não consulta dados de clientes.
+
+Qualquer assunto fora do sistema é recusado antes de chamar a IA.
+
+### Chave da IA (Groq, modelo `openai/gpt-oss-120b`)
+
+- **Na máquina local:** a chave fica no `src\main\resources\application-local.properties`,
+  junto com o usuário e a senha do Oracle (uma configuração por linha):
+  ```properties
+  ORACLE_USUARIO=rm999999
+  ORACLE_SENHA=suaSenha
+  GROQ_API_KEY=gsk_...
+  ```
+  Esse arquivo é ignorado pelo Git: nunca vai para o GitHub.
+- **No deploy (Render):** a chave fica nas variáveis de ambiente do serviço `hermes-api`
+  (painel do Render → Environment → `GROQ_API_KEY`). Nada de chave no código.
+
+Sem nenhuma chave, o chat responde "O Hermes está indisponível no momento" (HTTP 503) e o
+resto do sistema funciona normalmente.
+
+Testes do chat (padrão do projeto: `main` com try/catch, sem JUnit) — rode pelo IntelliJ
+(botão ▶ ao lado do `main`) ou pelo terminal depois de `.\mvnw test-compile`:
+
+```powershell
+java -cp "target/classes;target/test-classes" br.com.totvs.hermes.chat.EscopoGuardTest
+java -cp "target/classes;target/test-classes" br.com.totvs.hermes.chat.LlmComFallbackTest
+```
