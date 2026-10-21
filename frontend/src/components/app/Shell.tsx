@@ -17,6 +17,7 @@ const ROTAS = [
   { para: '/clientes', rotulo: 'Clientes' },
   { para: '/planos-acao', rotulo: 'Planos de ação' },
   { para: '/importacoes', rotulo: 'Importações' },
+  { para: '/analise-ia', rotulo: 'Análise IA' },
 ];
 
 /** Hermes Chat: montado uma vez no App para a conversa sobreviver à troca de

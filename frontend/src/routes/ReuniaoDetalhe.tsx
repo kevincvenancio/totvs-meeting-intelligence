@@ -33,6 +33,7 @@ import type {
   StatusPlanoAcao,
 } from '../lib/types';
 import { Erro, Esqueleto, Selo, Tela } from '../components/app/Shell';
+import { PainelAnaliseIa } from '../components/ia/PainelAnaliseIa';
 
 export function ReuniaoDetalhe() {
   const { id } = useParams();
@@ -135,6 +136,17 @@ export function ReuniaoDetalhe() {
 
           <div className="detalhe-grade">
             <div className="detalhe-principal">
+              {r.analiseIa && (
+                <Bloco
+                  titulo="Análise de IA (Hugging Face)"
+                  tom="var(--accent)"
+                  destaque
+                  acao={<Selo texto={r.origemAnalise ?? 'IA'} tom="var(--accent)" />}
+                >
+                  <PainelAnaliseIa analise={r.analiseIa} compacto />
+                </Bloco>
+              )}
+
               {r.resumoReuniao && (
                 <Bloco titulo="Resumo da conversa">
                   <p className="detalhe-texto">{r.resumoReuniao}</p>
@@ -262,7 +274,15 @@ export function ReuniaoDetalhe() {
 
               {r.recomendacaoFinal && (
                 <Bloco titulo="Recomendação final" tom="var(--accent)">
-                  <p className="detalhe-texto">{r.recomendacaoFinal}</p>
+                  {linhas(r.recomendacaoFinal).length > 1 ? (
+                    <ul className="detalhe-lista">
+                      {linhas(r.recomendacaoFinal).map((acao) => (
+                        <li key={acao}>{acao}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="detalhe-texto">{r.recomendacaoFinal}</p>
+                  )}
                 </Bloco>
               )}
             </div>

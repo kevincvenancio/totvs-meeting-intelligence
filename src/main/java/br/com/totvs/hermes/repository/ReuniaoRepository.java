@@ -52,4 +52,17 @@ public interface ReuniaoRepository extends JpaRepository<Reuniao, Long> {
     long countByLoteId(@Param("loteId") Long loteId);
 
     Optional<Reuniao> findTopByIdExternoAndDuplicadaFalse(String idExterno);
+
+    /**
+     * Reuniões que a fila de IA deve analisar: analisadas, não duplicadas e com conteúdo.
+     *
+     * @param todas {@code false} = só as que ainda não passaram pela IA
+     */
+    @Query("""
+            SELECT r.id FROM Reuniao r
+            WHERE r.analisada = true AND (r.duplicada = false OR r.duplicada IS NULL)
+              AND (r.statusCompletude IS NULL OR r.statusCompletude <> 'INCOMPLETA')
+              AND (:todas = true OR r.origemAnalise IS NULL OR r.origemAnalise IN ('REGRAS', 'IA_PENDENTE'))
+            ORDER BY r.id""")
+    List<Long> findIdsParaAnaliseIa(@Param("todas") boolean todas);
 }

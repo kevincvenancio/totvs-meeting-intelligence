@@ -1579,3 +1579,200 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* ── Análise IA (Hugging Face) ───────────────────────────────────────────── */
+
+.ia-entrada {
+  display: grid;
+  gap: 14px;
+  padding: clamp(18px, 2.4vw, 28px);
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+}
+
+.ia-campo {
+  display: grid;
+  gap: 8px;
+}
+
+.ia-campo textarea {
+  width: 100%;
+  min-height: 220px;
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--surface-0);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+}
+
+.ia-campo textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.ia-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.ia-contador {
+  margin-right: auto;
+  padding-bottom: 10px;
+}
+
+.ia-painel {
+  display: grid;
+  gap: clamp(14px, 1.8vw, 20px);
+  margin-top: clamp(16px, 2vw, 24px);
+}
+
+.ia-painel[data-compacto] {
+  margin-top: 0;
+}
+
+.ia-faixa {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.ia-kpi {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.ia-kpi-valor {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ia-kpi-valor small {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.ia-kpi-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.ia-medidor {
+  display: block;
+  height: 4px;
+  background: var(--hairline-soft);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ia-medidor span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.ia-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.ia-cartao {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 16px 18px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+}
+
+.ia-produtos,
+.ia-evidencias {
+  display: grid;
+  gap: 10px;
+}
+
+.ia-produtos li {
+  display: grid;
+  gap: 2px;
+  font-size: var(--text-small);
+}
+
+.ia-evidencias li {
+  display: grid;
+  gap: 4px;
+}
+
+.ia-nota {
+  font-size: var(--text-small);
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.ia-acoes {
+  display: grid;
+  gap: 12px;
+}
+
+.ia-acoes li {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  align-items: start;
+  gap: 12px;
+}
+
+.ia-acao {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ia-rodape {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+  .ia-acoes li {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ia-kpi > .selo,
+.ia-acoes .selo {
+  justify-self: start;
+  width: max-content;
+}
+
+.ia-fila {
+  margin-top: clamp(16px, 2vw, 24px);
+}
+
+.ia-fila-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.ia-fila-progresso {
+  display: grid;
+  gap: 8px;
+}
+
+.ia-fila-progresso .ia-medidor {
+  height: 6px;
+}

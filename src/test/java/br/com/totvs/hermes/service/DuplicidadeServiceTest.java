@@ -44,6 +44,7 @@ public class DuplicidadeServiceTest {
         @Override public @NonNull List<Reuniao> findByLoteId(@NonNull Long id) { throw new UnsupportedOperationException(); }
         @Override public @NonNull List<Reuniao> findAnalisadasByLoteId(@NonNull Long id) { throw new UnsupportedOperationException(); }
         @Override public long countByLoteId(@NonNull Long id) { throw new UnsupportedOperationException(); }
+        @Override public @NonNull List<Long> findIdsParaAnaliseIa(boolean todas) { throw new UnsupportedOperationException(); }
         @Override public @NonNull <S extends Reuniao> S save(@NonNull S e) { return e; }
         @Override public @NonNull <S extends Reuniao> List<S> saveAll(@NonNull Iterable<S> i) { throw new UnsupportedOperationException(); }
         @Override public @NonNull Optional<Reuniao> findById(@NonNull Long id) { throw new UnsupportedOperationException(); }

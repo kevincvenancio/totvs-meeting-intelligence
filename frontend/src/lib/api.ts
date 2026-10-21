@@ -7,6 +7,7 @@
    ========================================================================== */
 
 import type {
+  AnaliseIa,
   ChatRequisicao,
   ChatResposta,
   Cliente,
@@ -17,11 +18,14 @@ import type {
   ImportacaoLote,
   IndicadoresPlanoAcao,
   Insight,
+  ModoIa,
   PaginaResposta,
   PlanoAcao,
   ResultadoImportacao,
   ReuniaoDetalhe,
   ReuniaoResumo,
+  StatusFilaIa,
+  StatusIa,
   StatusPlanoAcao,
   Usuario,
 } from './types';
@@ -305,3 +309,43 @@ export async function enviarMensagemChat(requisicao: ChatRequisicao): Promise<Ch
   if (!resposta.ok) throw new ApiError(resposta.status, (corpo ?? {}) as ErroResposta);
   return corpo as ChatResposta;
 }
+
+/* ── IA Hermes (Hugging Face) ───────────────────────────────────────────────
+   Mesmo cuidado do chat: um 503 com corpo da API quer dizer "o serviço de IA
+   em Python está fora", não "o back-end caiu" — não liga o modo vitrine. */
+
+export const ia = {
+  status: () =>
+    ler<StatusIa>('/ia/status', () => ({ habilitada: false, online: false })),
+
+  fila: () =>
+    ler<StatusFilaIa>('/ia/fila', () => ({
+      habilitada: false, estado: 'DESLIGADA', pendentes: 0, processadas: 0, falhas: 0,
+    })),
+
+  analisarBase: (todas: boolean) =>
+    bruto<StatusFilaIa>('/ia/fila', { method: 'POST', query: { todas } }),
+
+  analisar: async (transcricao: string, modo: ModoIa): Promise<AnaliseIa> => {
+    let resposta: Response;
+    try {
+      resposta = await fetch(montarUrl('/ia/analises'), {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transcricao, modo }),
+      });
+    } catch {
+      marcar(false);
+      throw new ApiError(0, { mensagem: 'A API do Hermes não respondeu.' });
+    }
+    const corpo = (await resposta.json().catch(() => null)) as AnaliseIa | ErroResposta | null;
+    const respondeuAplicacao = corpo !== null && ('risco_churn' in corpo || 'caminho' in corpo);
+    if (!respondeuAplicacao && INDISPONIVEL.has(resposta.status)) {
+      marcar(false);
+      throw new ApiError(resposta.status, { mensagem: 'A API do Hermes não respondeu.' });
+    }
+    marcar(true);
+    if (!resposta.ok) throw new ApiError(resposta.status, (corpo ?? {}) as ErroResposta);
+    return corpo as AnaliseIa;
+  },
+};

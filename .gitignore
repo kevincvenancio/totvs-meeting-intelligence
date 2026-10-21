@@ -105,3 +105,9 @@ relatorios/
 
 # Dados de demonstracao (seed e ids criados)
 scripts/demo/
+
+# Python (ciencia-de-dados)
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

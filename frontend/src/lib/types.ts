@@ -127,9 +127,100 @@ export interface ReuniaoDetalhe extends ReuniaoResumo {
   idReuniaoOriginalDuplicada?: number;
   nomeArquivoOrigem?: string;
   dataImportacao?: string;
+  /* Análise de IA (Hugging Face) — presentes quando o serviço de IA analisou a reunião */
+  origemAnalise?: string;
+  scoreChurn?: number;
+  scoreOportunidade?: number;
+  saudeCliente?: number;
+  termosPrincipais?: string;
+  analiseIa?: AnaliseIa;
   totalInsights: number;
   totalComentarios: number;
   totalPlanosAcao: number;
+}
+
+/* ── IA Hermes (serviço ciencia-de-dados, modelos do Hugging Face) ───────
+   Espelho do JSON devolvido por POST /api/v1/ia/analises e gravado em
+   ReuniaoDetalhe.analiseIa. */
+
+export type ModoIa = 'hibrido' | 'modelo' | 'heuristico';
+
+export interface EvidenciaIa {
+  trecho: string;
+  probabilidade: number | null;
+  origem: string;
+}
+
+export interface ProdutoIa {
+  produto: string;
+  confianca: number;
+  origem: string;
+  evidencia: string;
+}
+
+export interface RecomendacaoIa {
+  acao: string;
+  prioridade: 'ALTA' | 'MEDIA' | 'BAIXA';
+  prazo: string;
+  responsavel: string;
+  motivo: string;
+}
+
+export interface AnaliseIa {
+  versao: string;
+  modo: ModoIa;
+  modelos: { sentimento: string; zero_shot: string } | null;
+  processamento: { palavras: number; locutores: number; trechos: number; trechos_avaliados_zero_shot: number };
+  produtos_identificados: ProdutoIa[];
+  produto_principal: string | null;
+  concorrentes: string[];
+  sentimento: {
+    rotulo: 'POSITIVO' | 'NEGATIVO' | 'NEUTRO' | 'MISTO';
+    score: number;
+    distribuicao_trechos: { positivo: number; neutro: number; negativo: number } | null;
+    justificativa: string;
+  };
+  risco_churn: {
+    nivel: RiscoChurn;
+    score: number;
+    score_modelo: number | null;
+    score_lexico: number;
+    sinais: string[];
+    evidencias: EvidenciaIa[];
+  };
+  oportunidade_comercial: {
+    nivel: 'ALTA' | 'MEDIA' | 'BAIXA';
+    score: number;
+    score_modelo: number | null;
+    score_lexico: number;
+    budget: string | null;
+    venda_cruzada: { produto: string; sinal: string }[];
+    evidencias: EvidenciaIa[];
+  };
+  dores: { descricao: string; criticidade: string; termo: string }[];
+  termos_principais: { termo: string; relevancia: number }[];
+  indicadores: { saude_cliente: number; prioridade: string; sentimento_hermes: Sentimento };
+  recomendacoes: RecomendacaoIa[];
+  tempo_ms: number;
+}
+
+export interface StatusFilaIa {
+  habilitada: boolean;
+  estado: 'DESLIGADA' | 'PARADA' | 'PROCESSANDO' | 'AGUARDANDO_IA';
+  pendentes: number;
+  processadas: number;
+  falhas: number;
+  segundosPorReuniao?: number;
+  minutosRestantes?: number;
+  ultimaAtualizacao?: string;
+  ultimoErro?: string;
+}
+
+export interface StatusIa {
+  habilitada: boolean;
+  online: boolean;
+  modo?: string;
+  url?: string;
 }
 
 export interface Insight {

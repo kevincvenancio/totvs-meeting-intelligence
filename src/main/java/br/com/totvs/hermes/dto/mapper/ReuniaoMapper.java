@@ -1,5 +1,8 @@
 package br.com.totvs.hermes.dto.mapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.totvs.hermes.dto.requisicao.ReuniaoRequisicao;
 import br.com.totvs.hermes.dto.resposta.ClienteResumoResposta;
 import br.com.totvs.hermes.dto.resposta.ReuniaoDetalheResposta;
@@ -142,6 +145,13 @@ public final class ReuniaoMapper {
                 reuniao.getNomeArquivoOrigem(),
                 reuniao.getDataImportacao(),
 
+                reuniao.getOrigemAnalise(),
+                reuniao.getScoreChurn(),
+                reuniao.getScoreOportunidade(),
+                reuniao.getSaudeCliente(),
+                reuniao.getTermosPrincipais(),
+                analiseIa(reuniao.getAnaliseIa()),
+
                 totalInsights,
                 totalComentarios,
                 totalPlanosAcao);
@@ -152,6 +162,20 @@ public final class ReuniaoMapper {
     }
 
     // ── Apoio ─────────────────────────────────────────────────────────
+
+    private static final ObjectMapper JSON = new ObjectMapper();
+
+    /** JSON da IA gravado no CLOB → objeto (o front recebe a estrutura, não uma string). */
+    static JsonNode analiseIa(String json) {
+        if (json == null || json.isBlank()) {
+            return null;
+        }
+        try {
+            return JSON.readTree(json);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
 
     /** Lê o código do lote somente quando a associação já está carregada. */
     private static String codigoLote(Reuniao reuniao) {

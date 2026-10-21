@@ -1,5 +1,6 @@
 package br.com.totvs.hermes.exception;
 
+import br.com.totvs.hermes.ia.IaIndisponivelException;
 import br.com.totvs.hermes.dto.resposta.ErroCampo;
 import br.com.totvs.hermes.dto.resposta.ErroResposta;
 import jakarta.servlet.http.HttpServletRequest;
@@ -84,6 +85,12 @@ public class ManipuladorGlobalExcecoes {
     @ExceptionHandler(HermesIndisponivelException.class)
     public ResponseEntity<ErroResposta> tratarHermesIndisponivel(HermesIndisponivelException excecao,
                                                                  HttpServletRequest requisicao) {
+        return construir(HttpStatus.SERVICE_UNAVAILABLE, excecao.getMessage(), requisicao);
+    }
+
+    @ExceptionHandler(IaIndisponivelException.class)
+    public ResponseEntity<ErroResposta> tratarIaIndisponivel(IaIndisponivelException excecao,
+                                                             HttpServletRequest requisicao) {
         return construir(HttpStatus.SERVICE_UNAVAILABLE, excecao.getMessage(), requisicao);
     }
 

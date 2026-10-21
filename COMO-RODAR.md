@@ -1,12 +1,13 @@
 # Como rodar o TOTVS Hermes
 
 Guia completo para subir o projeto do zero numa máquina Windows.
-São **dois programas rodando ao mesmo tempo**, cada um na sua janela de terminal:
+São **dois programas rodando ao mesmo tempo** (três, com a IA), cada um na sua janela de terminal:
 
 | Janela | O que roda | Endereço |
 |--------|------------|----------|
 | Terminal 1 | Back-end — API Java (Spring Boot) | http://localhost:8080 |
 | Terminal 2 | Front-end — React (Vite) | http://localhost:5173 |
+| Terminal 3 (opcional) | IA — modelos do Hugging Face (Python) | http://localhost:8000 — ver [IA Hermes](#ia-hermes-modelos-do-hugging-face--terminal-3) |
 
 O front-end conversa com a API; se você abrir só o front, ele entra em "modo vitrine"
 (dados falsos de demonstração) e avisa na tela. Para ver o sistema de verdade, **as duas
@@ -299,6 +300,69 @@ Para escolher um perfil pela IDE: `Run → Edit Configurations…` → campo
 > é só trocar `.\mvnw` por `mvn` em todos os comandos deste guia.
 
 ---
+
+## IA Hermes (modelos do Hugging Face) — Terminal 3
+
+A análise das reuniões usa dois modelos do Hugging Face, que rodam num serviço Python
+(pasta `ciencia-de-dados`). O back-end Java chama esse serviço a cada reunião analisada.
+**Sem ele o sistema funciona igual, só com as regras** — a IA é ligada por configuração.
+
+### Primeira vez (instala Python, PyTorch e os modelos)
+
+Precisa do **Python 3.10 ou superior** (https://www.python.org/downloads — marque
+"Add python.exe to PATH" no instalador). Abra uma **terceira janela** do PowerShell:
+
+```powershell
+cd $env:USERPROFILE\Documents\totvs-meeting-intelligence\ciencia-de-dados
+python -m venv .venv
+.venv\Scripts\activate
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+```
+
+> O primeiro `pip install` baixa o PyTorch só para CPU (bem menor que a versão com GPU).
+
+### Subir o serviço
+
+```powershell
+cd $env:USERPROFILE\Documents\totvs-meeting-intelligence\ciencia-de-dados
+.venv\Scripts\activate
+uvicorn api:app --port 8000
+```
+
+Na **primeira vez** ele baixa os dois modelos (~1 GB) antes de ficar pronto. Espere a linha
+`Application startup complete.` Nas próximas vezes sobe em segundos, sem internet.
+
+### Ligar a IA no back-end
+
+Acrescente uma linha no `src\main\resources\application-local.properties` (o mesmo do Oracle):
+
+```properties
+HERMES_IA_URL=http://localhost:8000
+```
+
+e reinicie o back-end (Terminal 1). No log deve aparecer `IA Hermes habilitada em http://localhost:8000`.
+
+### Onde a IA aparece
+
+| Onde | O que faz |
+|------|-----------|
+| http://localhost:5173/analise-ia | Cola uma transcrição nova e vê produto, sentimento, churn, oportunidade, termos e recomendações |
+| Importações (.txt, .docx ou CSV) | A importação termina na hora; cada reunião entra na fila e o modelo grava os indicadores no banco em segundo plano |
+| http://localhost:5173/analise-ia → "Análise da base pelo modelo" | Manda para o modelo as reuniões que faltam (ou todas) e mostra o andamento: analisadas, na fila, segundos por reunião e minutos restantes |
+| Reanálise (`POST /api/v1/reunioes/{id}/analise`) | Reanalisa uma reunião antiga com a IA |
+| Detalhe da reunião | Bloco "Análise de IA (Hugging Face)" com os scores e os trechos que justificam |
+| Swagger | `GET /api/v1/ia/status`, `POST /api/v1/ia/analises`, `GET` e `POST /api/v1/ia/fila` |
+
+**Quanto tempo leva:** ~1,6 s por reunião longa numa CPU de 2 núcleos — a base inteira
+(1.126 reuniões) em **~30 minutos**, menos numa máquina com mais núcleos. Enquanto isso o sistema
+funciona normalmente; as reuniões que o modelo ainda não analisou aparecem com a análise
+provisória das regras e são atualizadas conforme a fila anda.
+
+Para analisar a base que já está no Oracle: suba a IA, abra **Análise IA** e clique em
+**"Analisar com o modelo as que faltam"**.
+
+Se o serviço do modelo cair, a fila espera e tenta de novo a cada 30 s — nenhuma reunião se perde.
 
 ## Hermes Chat (assistente)
 

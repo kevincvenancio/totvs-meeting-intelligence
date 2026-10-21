@@ -1,0 +1,13 @@
+# Núcleo do pipeline (modelos do Hugging Face)
+transformers>=4.40
+torch>=2.1
+sentencepiece>=0.1.99   # tokenizador do mDeBERTa-v3
+protobuf>=3.20          # necessário para converter o tokenizador do mDeBERTa
+
+# Protótipo e API
+gradio>=4.30
+fastapi>=0.110
+uvicorn>=0.29
+
+# Testes
+pytest>=8

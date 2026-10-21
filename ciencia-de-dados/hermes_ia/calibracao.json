@@ -1,0 +1,109 @@
+{
+  "modelos": {
+    "MoritzLaurer/multilingual-MiniLMv2-L6-mnli-xnli": {
+      "fonte": "diagnostico-rapido.csv",
+      "modelo_zero_shot": "MoritzLaurer/multilingual-MiniLMv2-L6-mnli-xnli",
+      "n": 20,
+      "churn": {
+        "hibrido": {
+          "formulacao": "ajuste_regras",
+          "limiar_sobe": 0.3247,
+          "limiar_desce": 0.2152
+        },
+        "modelo": {
+          "formulacao": "pontuacao",
+          "pesos_modelo": [
+            1.0
+          ],
+          "peso_regras": 0.0,
+          "limiar_medio": 0.2881,
+          "limiar_alto": 0.3247
+        },
+        "loocv": {
+          "regras": [
+            0.7,
+            0.533
+          ],
+          "modelo": [
+            0.75,
+            0.449
+          ],
+          "hibrido": [
+            0.75,
+            0.567
+          ]
+        }
+      },
+      "oportunidade": {
+        "hibrido": {
+          "formulacao": "pontuacao",
+          "pesos_modelo": [
+            1.0,
+            1.0
+          ],
+          "peso_regras": 0.2,
+          "limiar_medio": 0.5018,
+          "limiar_alto": 0.6879
+        },
+        "modelo": {
+          "formulacao": "pontuacao",
+          "pesos_modelo": [
+            1.0,
+            0.0
+          ],
+          "peso_regras": 0.0,
+          "limiar_medio": 0.1828,
+          "limiar_alto": 0.219
+        },
+        "loocv": {
+          "regras": [
+            0.5,
+            0.399
+          ],
+          "modelo": [
+            0.6,
+            0.6
+          ],
+          "hibrido": [
+            0.8,
+            0.806
+          ]
+        }
+      },
+      "sentimento": {
+        "hibrido": {
+          "formulacao": "pontuacao",
+          "pesos_modelo": [
+            1.0
+          ],
+          "peso_regras": 1.0,
+          "limiar_medio": -0.8561,
+          "limiar_alto": 0.1845
+        },
+        "modelo": {
+          "formulacao": "pontuacao",
+          "pesos_modelo": [
+            1.0
+          ],
+          "peso_regras": 0.0,
+          "limiar_medio": -0.3649,
+          "limiar_alto": -0.1738
+        },
+        "loocv": {
+          "regras": [
+            0.75,
+            0.713
+          ],
+          "modelo": [
+            0.4,
+            0.324
+          ],
+          "hibrido": [
+            0.8,
+            0.771
+          ]
+        }
+      }
+    }
+  }
+}

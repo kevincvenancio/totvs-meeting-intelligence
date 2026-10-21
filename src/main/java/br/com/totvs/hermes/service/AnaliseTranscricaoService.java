@@ -1,5 +1,7 @@
 package br.com.totvs.hermes.service;
 
+import br.com.totvs.hermes.ia.AplicadorAnaliseIa;
+import br.com.totvs.hermes.ia.HermesIaClient;
 import br.com.totvs.hermes.model.Insight;
 import br.com.totvs.hermes.model.Reuniao;
 import br.com.totvs.hermes.model.RiscoChurn;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
  *  - Classificar completude (COMPLETA / PARCIAL / INCOMPLETA) via pontuação
  *  - Identificar produtos TOTVS, concorrentes e dores
  *  - Delegar cálculo de sentimento, churn e extração de insights aos serviços especializados
+ *  - Quando o serviço de IA está configurado (hermes.ia.url), refinar churn, sentimento,
+ *    produtos, prioridade e recomendação com os modelos do Hugging Face
  */
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class AnaliseTranscricaoService {
     private final SentimentoService sentimentoService;
     private final ChurnService churnService;
     private final InsightExtratorService insightExtratorService;
+    private final HermesIaClient iaClient;
 
     // ── Dicionário de Produtos TOTVS ──────────────────────────────────
     private static final Map<String, String[]> PRODUTOS_TOTVS = new LinkedHashMap<>();
@@ -151,6 +156,16 @@ public class AnaliseTranscricaoService {
      */
     @Transactional
     public void analisarReuniao(Reuniao reuniao) {
+        analisarReuniao(reuniao, true);
+    }
+
+    /**
+     * @param iaAgora {@code true} = chama a IA já (cadastro, .txt, reanálise: uma reunião,
+     *                ~2 s); {@code false} = só regras agora e a reunião vai para a
+     *                {@link br.com.totvs.hermes.ia.FilaAnaliseIa} (importação de CSV em massa)
+     */
+    @Transactional
+    public void analisarReuniao(Reuniao reuniao, boolean iaAgora) {
 
         // Obter texto para análise — prefere a transcrição tratada
         String texto = reuniao.getTranscricaoTratada();
@@ -230,11 +245,7 @@ public class AnaliseTranscricaoService {
         String pontos  = listarPontosPrincipais(dores, produtos, concorrentes, oportunidades);
         String recFinal = gerarRecomendacao(concorrentes, churn, oportunidades, budget, scoreC, completude);
 
-        // 12. Salvar intuições e atualizar reunião
-        if (!intuicoes.isEmpty()) {
-            insightRepository.saveAll(intuicoes);
-        }
-
+        // 12. Atualizar reunião com o resultado das regras
         reuniao.setProdutosIdentificados(join(produtos, ", "));
         reuniao.setConcorrentesIdentificados(join(concorrentes, ", "));
         reuniao.setDoresIdentificadas(join(dores, "; "));
@@ -262,10 +273,42 @@ public class AnaliseTranscricaoService {
             reuniao.setCliente(reuniao.getNomeUnidade());
         }
 
+        // 13. IA (Hugging Face) — refina churn, sentimento, produtos, prioridade e recomendação
+        aplicarIa(reuniao, texto, completude, intuicoes, iaAgora);
+
+        // 14. Salvar intuições e reunião
+        if (!intuicoes.isEmpty()) {
+            insightRepository.saveAll(intuicoes);
+        }
         reuniaoRepository.save(reuniao);
 
-        log.info("Reunião {} | {} ({} pts) | {} | scoreC={} | churn={} | sent={}",
-                reuniao.getId(), completude, pontuacao, catReuniao, scoreC, churn, sentResult[0]);
+        log.info("Reunião {} | {} ({} pts) | {} | scoreC={} | churn={} | sent={} | origem={}",
+                reuniao.getId(), completude, pontuacao, catReuniao, scoreC,
+                reuniao.getRiscoChurn(), reuniao.getSentimento(), reuniao.getOrigemAnalise());
+    }
+
+    /**
+     * Chama o serviço de IA quando ele está configurado. Se a IA estiver desligada ou
+     * fora do ar, a reunião fica com a análise das regras (nada é perdido).
+     * Quando a IA responde, os insights de churn das regras saem da lista: a IA reavalia
+     * o churn e grava as próprias evidências, e as duas versões juntas confundiriam o vendedor.
+     */
+    private void aplicarIa(Reuniao reuniao, String texto, String completude, List<Insight> intuicoes,
+                           boolean iaAgora) {
+        AplicadorAnaliseIa.limpar(reuniao);
+        if ("INCOMPLETA".equals(completude)) {
+            return;
+        }
+        if (!iaAgora) {
+            if (iaClient.habilitado()) {
+                AplicadorAnaliseIa.marcarPendente(reuniao);
+            }
+            return;
+        }
+        iaClient.tentarAnalisar(texto).ifPresent(ia -> {
+            intuicoes.removeIf(i -> i.getTipo() != null && i.getTipo().startsWith("Risco de churn —"));
+            intuicoes.addAll(AplicadorAnaliseIa.aplicar(reuniao, ia));
+        });
     }
 
     // ── Locutores ─────────────────────────────────────────────────────
@@ -418,6 +461,7 @@ public class AnaliseTranscricaoService {
         r.setAnalisada(true);
         r.setQuantidadePalavras(0);
         r.setRiscoChurn(RiscoChurn.BAIXO);
+        AplicadorAnaliseIa.limpar(r);
     }
 
     // ── Identificação de entidades ─────────────────────────────────────

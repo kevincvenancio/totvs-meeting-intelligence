@@ -1,5 +1,6 @@
 package br.com.totvs.hermes.service;
 
+import br.com.totvs.hermes.ia.FilaAnaliseIa;
 import br.com.totvs.hermes.model.ImportacaoLote;
 import br.com.totvs.hermes.model.Reuniao;
 import br.com.totvs.hermes.repository.ReuniaoRepository;
@@ -30,6 +31,7 @@ public class CsvService {
     private final FeedbackReuniaoService     feedbackService;
     private final ImportacaoLoteService      loteService;
     private final DuplicidadeService         duplicidadeService;
+    private final FilaAnaliseIa              filaIa;
 
     private static final Pattern REC_START = Pattern.compile(
             "(?m)^\"(\\d+),(\\d{4}-\\d{2}-\\d{2})");
@@ -169,8 +171,11 @@ public class CsvService {
         r.setNomeArquivoOrigem(nomeArquivo);
         r.setDuplicada(false);
         Reuniao salva = reuniaoRepository.save(r);
-        analiseService.analisarReuniao(salva);
+        // Regras agora; o modelo de IA roda em segundo plano (FilaAnaliseIa), em lotes,
+        // depois do commit da importação — o upload não espera a inferência.
+        analiseService.analisarReuniao(salva, false);
         feedbackService.gerarFeedback(salva);
+        filaIa.enfileirar(salva.getId());
         return salva;
     }
 

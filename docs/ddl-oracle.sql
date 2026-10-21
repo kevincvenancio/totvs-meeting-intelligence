@@ -30,3 +30,8 @@ alter table planos_acao add constraint FKlodpv05p8t6v0nroj5gn6bysa foreign key (
 alter table planos_acao add constraint FK2u3s9apet6wqg015h15o1atr8 foreign key (reuniao_id) references reunioes;
 alter table reunioes add constraint FK9wttnl80krobsgs76rybeshbc foreign key (cliente_id) references clientes;
 alter table reunioes add constraint FKr14ni8q54jhp7gucbqa4riugn foreign key (lote_id) references importacao_lotes;
+
+-- ── Sprint 4: análise de IA (modelos do Hugging Face) ─────────────────────
+-- O Hibernate (ddl-auto=update) cria estas colunas sozinho no primeiro start;
+-- o comando abaixo é o equivalente manual.
+alter table reunioes add (origem_analise varchar2(30 char), score_churn number(10,0), score_oportunidade number(10,0), saude_cliente number(10,0), termos_principais varchar2(500 char), analise_ia clob);

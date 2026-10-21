@@ -114,6 +114,22 @@ public class Reuniao {
 
     private Integer scoreQualidade;
     private Integer scoreComercial;
+
+    // ── Análise de IA (modelos do Hugging Face, serviço ciencia-de-dados) ──
+    /** REGRAS quando só o motor de regras analisou; IA_HIBRIDO / IA_MODELO quando a IA respondeu. */
+    @Column(length = 30)
+    private String origemAnalise;
+    /** Risco de churn calculado pela IA (0-100). */
+    private Integer scoreChurn;
+    /** Oportunidade comercial calculada pela IA (0-100). */
+    private Integer scoreOportunidade;
+    /** Saúde do cliente: 50% (100 − churn) + 30% sentimento + 20% oportunidade. */
+    private Integer saudeCliente;
+    @Column(length = 500)
+    private String termosPrincipais;
+    /** Resposta completa da IA (JSON), exibida no detalhe da reunião. */
+    @Lob
+    private String analiseIa;
     private Integer quantidadePalavras;
     private Integer quantidadeLocutores;
     private Boolean analisada = false;  // corrigido: cast (Boolean) removido

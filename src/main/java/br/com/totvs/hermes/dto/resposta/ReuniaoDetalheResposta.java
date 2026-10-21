@@ -3,6 +3,7 @@ package br.com.totvs.hermes.dto.resposta;
 import br.com.totvs.hermes.model.RiscoChurn;
 import br.com.totvs.hermes.model.Sentimento;
 import br.com.totvs.hermes.model.StatusCompletude;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -70,6 +71,14 @@ public record ReuniaoDetalheResposta(
         String codigoLote,
         String nomeArquivoOrigem,
         LocalDateTime dataImportacao,
+
+        // ── Análise de IA (Hugging Face) ─────────────────────────────
+        String origemAnalise,
+        Integer scoreChurn,
+        Integer scoreOportunidade,
+        Integer saudeCliente,
+        String termosPrincipais,
+        JsonNode analiseIa,
 
         // ── Contadores de apoio ───────────────────────────────────────
         long totalInsights,

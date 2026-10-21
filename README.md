@@ -52,6 +52,40 @@ Como o front chama a API por caminho relativo (`/api/v1`), o mesmo código funci
 | CPU fraca (cerca de 0,1 vCPU) | JIT só no nível 1 (`-XX:TieredStopAtLevel=1`), o que acelera a inicialização |
 | Banco no Brasil, API nos EUA | O painel lê só as colunas que agrega, sem os CLOBs; prefetch de LOB e `fetch_size` maiores no driver |
 
+## Ciência de dados — Sprint 4 (modelo do Hugging Face)
+
+A pasta [`ciencia-de-dados/`](ciencia-de-dados/) tem o pipeline
+**Transcrição → Processamento → Modelo → Indicadores → Recomendação** em Python, com dois modelos
+do Hugging Face (sentimento `lxyuan/distilbert-base-multilingual-cased-sentiments-student` e
+zero-shot `MoritzLaurer/multilingual-MiniLMv2-L6-mnli-xnli`) combinados com as regras deste back-end.
+Recebe uma transcrição nova e devolve produto identificado, sentimento, risco de churn, oportunidade
+comercial, termos principais e recomendações de ação. Detalhes do modelo, scoring e validação em
+[`ciencia-de-dados/README.md`](ciencia-de-dados/README.md).
+
+**Acoplado ao sistema:**
+
+```
+Front (React) ──▶ API Java ──▶ AnaliseTranscricaoService ──regras──▶ análise base
+   /analise-ia        │                    │
+                      │                    └──HermesIaClient──▶ IA Python (FastAPI :8000)
+                      └── /api/v1/ia/*        FilaAnaliseIa ──┘    Hugging Face: DistilBERT + MiniLMv2
+```
+
+| Peça | Arquivo |
+|------|---------|
+| Cliente HTTP da IA (timeout, fallback para as regras) | `ia/HermesIaClient.java` |
+| Grava o resultado da IA na reunião + insights com as evidências | `ia/AplicadorAnaliseIa.java` |
+| Endpoints `GET /api/v1/ia/status` e `POST /api/v1/ia/analises` | `ia/IaController.java` |
+| Chamada na análise de cada reunião (cadastro e reanálise: na hora) | `service/AnaliseTranscricaoService.java` |
+| Fila em segundo plano: importação e "analisar a base" (lotes de 8, tenta de novo se a IA cair) | `ia/FilaAnaliseIa.java` |
+| Colunas novas em `reunioes`: `origem_analise`, `score_churn`, `score_oportunidade`, `saude_cliente`, `termos_principais`, `analise_ia` | `model/Reuniao.java`, `docs/ddl-oracle.sql` |
+| Tela "Análise IA" e bloco de IA no detalhe da reunião | `frontend/src/routes/AnaliseIa.tsx`, `components/ia/PainelAnaliseIa.tsx` |
+
+A IA liga com `HERMES_IA_URL=http://localhost:8000` (variável de ambiente ou
+`application-local.properties`). Sem ela, ou se o serviço Python cair, a análise continua só
+com as regras — nada quebra. Passo a passo em [`COMO-RODAR.md`](COMO-RODAR.md#ia-hermes-modelos-do-hugging-face--terminal-3).
+No Render a IA fica desligada: os modelos precisam de ~2 GB de memória e o plano gratuito tem 512 MB.
+
 ## Atualizações recentes (deploy e qualidade da análise)
 
 | Entrega | Descrição |
@@ -487,6 +521,7 @@ java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ValorFinanceiroTest
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.ChurnServiceTest
 java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.service.TranscricaoArquivoServiceTest
+java -cp "target/test-classes;target/classes;$(cat cp.txt)" br.com.totvs.hermes.ia.AplicadorAnaliseIaTest
 ```
 
 `ValorFinanceiroTest` e `ChurnServiceTest` cobrem as regras de budget e de churn com trechos

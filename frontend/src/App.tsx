@@ -22,6 +22,7 @@ const PlanosAcao = lazy(() => import('./routes/PlanosAcao').then((m) => ({ defau
 const Importacoes = lazy(() =>
   import('./routes/Importacoes').then((m) => ({ default: m.Importacoes })),
 );
+const AnaliseIa = lazy(() => import('./routes/AnaliseIa').then((m) => ({ default: m.AnaliseIa })));
 const Entrar = lazy(() => import('./routes/Entrar').then((m) => ({ default: m.Entrar })));
 
 const clienteConsulta = new QueryClient({
@@ -86,6 +87,7 @@ export default function App() {
             <Route path="/clientes" element={<Clientes />} />
             <Route path="/planos-acao" element={<PlanosAcao />} />
             <Route path="/importacoes" element={<Importacoes />} />
+            <Route path="/analise-ia" element={<AnaliseIa />} />
             <Route path="*" element={<Landing />} />
           </Routes>
         </Suspense>
